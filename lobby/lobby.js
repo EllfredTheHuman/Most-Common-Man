@@ -16,89 +16,52 @@ serverTimestamp
 // STATE
 // ==================================================
 
-const urlParams =
-new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search);
 
-const isHost =
-urlParams.get("host") === "true";
+const isHost = urlParams.get("host") === "true";
 
 let currentUser = null;
-
 let currentRoomCode = null;
-
 let currentPlayerName = null;
 
 let unsubscribePlayers = null;
-
 let unsubscribeRoom = null;
 
 // ==================================================
 // ELEMENTS
 // ==================================================
 
-const nameSection =
-document.getElementById("nameSection");
+const nameSection = document.getElementById("nameSection");
+const lobbyContent = document.getElementById("lobbyContent");
 
-const lobbyContent =
-document.getElementById("lobbyContent");
+const playerNameInput = document.getElementById("playerName");
+const joinLobbyButton = document.getElementById("joinLobbyButton");
 
-const playerNameInput =
-document.getElementById("playerName");
+const gameCodeElement = document.getElementById("gameCode");
+const copyCodeButton = document.getElementById("copyCodeButton");
 
-const joinLobbyButton =
-document.getElementById("joinLobbyButton");
+const playersList = document.getElementById("playersList");
+const playerCount = document.getElementById("playerCount");
 
-const gameCodeElement =
-document.getElementById("gameCode");
+const hostSettings = document.getElementById("hostSettings");
+const modifierSelect = document.getElementById("modifierSelect");
 
-const copyCodeButton =
-document.getElementById("copyCodeButton");
-
-const playersList =
-document.getElementById("playersList");
-
-const playerCount =
-document.getElementById("playerCount");
-
-const hostSettings =
-document.getElementById("hostSettings");
-
-const modifierSelect =
-document.getElementById("modifierSelect");
-
-const startButton =
-document.getElementById("startButton");
-
-const leaveButton =
-document.getElementById("leaveButton");
+const startButton = document.getElementById("startButton");
+const leaveButton = document.getElementById("leaveButton");
 
 // ==================================================
 // FIREBASE LOGIN
 // ==================================================
 
 async function initialiseFirebase() {
-
-```
 try {
+currentUser = await loginAnonymously();
 
-    currentUser =
-        await loginAnonymously();
-
-    console.log(
-        "Firebase connected."
-    );
-
-    console.log(
-        "User ID:",
-        currentUser.uid
-    );
+    console.log("Firebase connected.");
+    console.log("User ID:", currentUser.uid);
 
 } catch (error) {
-
-    console.error(
-        "Firebase authentication failed:",
-        error
-    );
+    console.error("Firebase authentication failed:", error);
 
     alert(
         "Couldn't connect to Firebase.\n\n" +
@@ -106,9 +69,7 @@ try {
     );
 
     joinLobbyButton.disabled = true;
-
 }
-```
 
 }
 
@@ -118,43 +79,28 @@ initialiseFirebase();
 // NAME / JOIN BUTTON
 // ==================================================
 
-joinLobbyButton.addEventListener(
-"click",
-handleJoinButton
-);
+joinLobbyButton.addEventListener("click", handleJoinButton);
 
 async function handleJoinButton() {
 
-```
-const name =
-    playerNameInput.value.trim();
-
+const name = playerNameInput.value.trim();
 
 if (!name) {
 
-    playerNameInput.classList.add(
-        "input-error"
-    );
+    playerNameInput.classList.add("input-error");
 
     setTimeout(() => {
-
-        playerNameInput.classList.remove(
-            "input-error"
-        );
-
+        playerNameInput.classList.remove("input-error");
     }, 300);
 
     playerNameInput.focus();
 
     return;
-
 }
-
 
 if (name.length > 20) {
     return;
 }
-
 
 if (!currentUser) {
 
@@ -164,34 +110,24 @@ if (!currentUser) {
     );
 
     return;
-
 }
-
 
 currentPlayerName = name;
 
-
 joinLobbyButton.disabled = true;
-
-joinLobbyButton.textContent =
-    "CONNECTING...";
-
+joinLobbyButton.textContent = "CONNECTING...";
 
 try {
 
     if (isHost) {
-
         await createGame();
-
     } else {
-
         await askForGameCode();
-
     }
 
 } catch (error) {
 
-    console.error(error);
+    console.error("Lobby error:", error);
 
     alert(
         "Something went wrong.\n\n" +
@@ -199,9 +135,7 @@ try {
     );
 
     resetJoinButton();
-
 }
-```
 
 }
 
@@ -209,21 +143,13 @@ try {
 // ENTER KEY
 // ==================================================
 
-playerNameInput.addEventListener(
-"keydown",
-event => {
+playerNameInput.addEventListener("keydown", event => {
 
-```
-    if (event.key === "Enter") {
-
-        handleJoinButton();
-
-    }
-
+if (event.key === "Enter") {
+    handleJoinButton();
 }
-```
 
-);
+});
 
 // ==================================================
 // CREATE GAME
@@ -231,98 +157,71 @@ event => {
 
 async function createGame() {
 
-```
 let roomCode;
-
 let roomRef;
-
 
 while (true) {
 
-    roomCode =
-        generateRoomCode();
+    roomCode = generateRoomCode();
 
+    roomRef = doc(
+        db,
+        "rooms",
+        roomCode
+    );
 
-    roomRef =
-        doc(
-            db,
-            "rooms",
-            roomCode
-        );
-
-
-    const existingRoom =
-        await getDoc(roomRef);
-
+    const existingRoom = await getDoc(roomRef);
 
     if (!existingRoom.exists()) {
         break;
     }
-
 }
 
 
-await setDoc(
-    roomRef,
-    {
+// Create room
+await setDoc(roomRef, {
 
-        hostId:
-            currentUser.uid,
+    hostId: currentUser.uid,
 
-        status:
-            "lobby",
+    status: "lobby",
 
-        modifier:
-            "none",
+    modifier: "none",
 
-        currentRound:
-            0,
+    currentRound: 0,
 
-        createdAt:
-            serverTimestamp()
+    createdAt: serverTimestamp()
 
-    }
+});
+
+
+// Add host to players
+const playerRef = doc(
+    db,
+    "rooms",
+    roomCode,
+    "players",
+    currentUser.uid
 );
 
 
-const playerRef =
-    doc(
-        db,
-        "rooms",
-        roomCode,
-        "players",
-        currentUser.uid
-    );
+await setDoc(playerRef, {
+
+    name: currentPlayerName,
+
+    isHost: true,
+
+    score: 0,
+
+    joinedAt: serverTimestamp()
+
+});
 
 
-await setDoc(
-    playerRef,
-    {
-
-        name:
-            currentPlayerName,
-
-        isHost:
-            true,
-
-        score:
-            0,
-
-        joinedAt:
-            serverTimestamp()
-
-    }
-);
-
-
-currentRoomCode =
-    roomCode;
-
+currentRoomCode = roomCode;
 
 showLobby();
 
 startListeners();
-```
 
 }
 
@@ -332,31 +231,21 @@ startListeners();
 
 async function askForGameCode() {
 
-```
-const code =
-    prompt(
-        "ENTER GAME CODE"
-    );
 
+const code = prompt("ENTER GAME CODE");
 
 if (code === null) {
 
     resetJoinButton();
 
     return;
-
 }
 
 
-const roomCode =
-    code
-        .trim()
-        .toUpperCase();
+const roomCode = code.trim().toUpperCase();
 
 
-if (
-    !/^[A-Z0-9]{6}$/.test(roomCode)
-) {
+if (!/^[A-Z0-9]{6}$/.test(roomCode)) {
 
     alert(
         "Game codes are 6 characters long."
@@ -365,14 +254,11 @@ if (
     resetJoinButton();
 
     return;
-
 }
 
 
-await joinExistingGame(
-    roomCode
-);
-```
+await joinExistingGame(roomCode);
+
 
 }
 
@@ -380,21 +266,17 @@ await joinExistingGame(
 // JOIN EXISTING GAME
 // ==================================================
 
-async function joinExistingGame(
-roomCode
-) {
-
-```
-const roomRef =
-    doc(
-        db,
-        "rooms",
-        roomCode
-    );
+async function joinExistingGame(roomCode) {
 
 
-const roomSnapshot =
-    await getDoc(roomRef);
+const roomRef = doc(
+    db,
+    "rooms",
+    roomCode
+);
+
+
+const roomSnapshot = await getDoc(roomRef);
 
 
 if (!roomSnapshot.exists()) {
@@ -407,12 +289,10 @@ if (!roomSnapshot.exists()) {
     resetJoinButton();
 
     return;
-
 }
 
 
-const room =
-    roomSnapshot.data();
+const room = roomSnapshot.data();
 
 
 if (room.status !== "lobby") {
@@ -424,17 +304,15 @@ if (room.status !== "lobby") {
     resetJoinButton();
 
     return;
-
 }
 
 
-const playersRef =
-    collection(
-        db,
-        "rooms",
-        roomCode,
-        "players"
-    );
+const playersRef = collection(
+    db,
+    "rooms",
+    roomCode,
+    "players"
+);
 
 
 const playersSnapshot =
@@ -443,55 +321,42 @@ const playersSnapshot =
 
 if (playersSnapshot.size >= 8) {
 
-    alert(
-        "That game is full!"
-    );
+    alert("That game is full!");
 
     resetJoinButton();
 
     return;
-
 }
 
 
-const playerRef =
-    doc(
-        db,
-        "rooms",
-        roomCode,
-        "players",
-        currentUser.uid
-    );
-
-
-await setDoc(
-    playerRef,
-    {
-
-        name:
-            currentPlayerName,
-
-        isHost:
-            false,
-
-        score:
-            0,
-
-        joinedAt:
-            serverTimestamp()
-
-    }
+const playerRef = doc(
+    db,
+    "rooms",
+    roomCode,
+    "players",
+    currentUser.uid
 );
 
 
-currentRoomCode =
-    roomCode;
+await setDoc(playerRef, {
 
+    name: currentPlayerName,
+
+    isHost: false,
+
+    score: 0,
+
+    joinedAt: serverTimestamp()
+
+});
+
+
+currentRoomCode = roomCode;
 
 showLobby();
 
 startListeners();
-```
+
 
 }
 
@@ -501,34 +366,24 @@ startListeners();
 
 function showLobby() {
 
-```
-nameSection.classList.add(
-    "hidden"
-);
 
-lobbyContent.classList.remove(
-    "hidden"
-);
+nameSection.classList.add("hidden");
 
+lobbyContent.classList.remove("hidden");
 
-gameCodeElement.textContent =
-    currentRoomCode;
+gameCodeElement.textContent = currentRoomCode;
 
 
 if (isHost) {
 
-    hostSettings.classList.remove(
-        "hidden"
-    );
+    hostSettings.classList.remove("hidden");
 
 } else {
 
-    hostSettings.classList.add(
-        "hidden"
-    );
+    hostSettings.classList.add("hidden");
 
 }
-```
+
 
 }
 
@@ -538,11 +393,11 @@ if (isHost) {
 
 function startListeners() {
 
-```
+
 listenToPlayers();
 
 listenToRoom();
-```
+
 
 }
 
@@ -552,148 +407,115 @@ listenToRoom();
 
 function listenToPlayers() {
 
-```
+
 if (unsubscribePlayers) {
-
     unsubscribePlayers();
-
 }
 
 
-const playersRef =
-    collection(
-        db,
-        "rooms",
-        currentRoomCode,
-        "players"
-    );
+const playersRef = collection(
+    db,
+    "rooms",
+    currentRoomCode,
+    "players"
+);
 
 
-unsubscribePlayers =
-    onSnapshot(
-        playersRef,
+unsubscribePlayers = onSnapshot(
+    playersRef,
 
-        snapshot => {
+    snapshot => {
 
-            playersList.innerHTML = "";
+        playersList.innerHTML = "";
 
-
-            const players = [];
+        const players = [];
 
 
-            snapshot.forEach(
-                playerDoc => {
+        snapshot.forEach(playerDoc => {
 
-                    players.push({
+            players.push({
+                id: playerDoc.id,
+                ...playerDoc.data()
+            });
 
-                        id:
-                            playerDoc.id,
-
-                        ...playerDoc.data()
-
-                    });
-
-                }
-            );
+        });
 
 
-            players.sort(
-                (a, b) => {
+        players.sort((a, b) => {
 
-                    const aTime =
-                        a.joinedAt?.seconds || 0;
+            const aTime =
+                a.joinedAt?.seconds || 0;
 
-                    const bTime =
-                        b.joinedAt?.seconds || 0;
+            const bTime =
+                b.joinedAt?.seconds || 0;
 
-                    return aTime - bTime;
+            return aTime - bTime;
 
-                }
-            );
+        });
 
 
-            playerCount.textContent =
-                `${players.length}/8`;
+        playerCount.textContent =
+            `${players.length}/8`;
 
 
-            players.forEach(
-                player => {
+        players.forEach(player => {
 
-                    const card =
-                        document.createElement(
-                            "div"
-                        );
+            const card =
+                document.createElement("div");
 
-
-                    card.className =
-                        "player-card";
+            card.className =
+                "player-card";
 
 
-                    const name =
-                        document.createElement(
-                            "span"
-                        );
+            const name =
+                document.createElement("span");
+
+            name.textContent =
+                player.name;
 
 
-                    name.textContent =
-                        player.name;
+            card.appendChild(name);
 
 
-                    card.appendChild(
-                        name
-                    );
+            if (player.isHost) {
 
+                const host =
+                    document.createElement("span");
 
-                    if (player.isHost) {
+                host.textContent =
+                    "HOST";
 
-                        const host =
-                            document.createElement(
-                                "span"
-                            );
+                host.className =
+                    "player-host";
 
-
-                        host.textContent =
-                            "HOST";
-
-
-                        host.className =
-                            "player-host";
-
-
-                        card.appendChild(
-                            host
-                        );
-
-                    }
-
-
-                    playersList.appendChild(
-                        card
-                    );
-
-                }
-            );
-
-
-            if (isHost) {
-
-                startButton.disabled =
-                    players.length < 2;
-
+                card.appendChild(host);
             }
 
-        },
 
-        error => {
+            playersList.appendChild(card);
 
-            console.error(
-                "Player listener error:",
-                error
-            );
+        });
+
+
+        if (isHost) {
+
+            startButton.disabled =
+                players.length < 2;
 
         }
-    );
-```
+
+    },
+
+    error => {
+
+        console.error(
+            "Player listener error:",
+            error
+        );
+
+    }
+);
+
 
 }
 
@@ -703,75 +525,67 @@ unsubscribePlayers =
 
 function listenToRoom() {
 
-```
+
 if (unsubscribeRoom) {
-
     unsubscribeRoom();
-
 }
 
 
-const roomRef =
-    doc(
-        db,
-        "rooms",
-        currentRoomCode
-    );
+const roomRef = doc(
+    db,
+    "rooms",
+    currentRoomCode
+);
 
 
-unsubscribeRoom =
-    onSnapshot(
-        roomRef,
+unsubscribeRoom = onSnapshot(
+    roomRef,
 
-        snapshot => {
+    snapshot => {
 
-            if (!snapshot.exists()) {
+        if (!snapshot.exists()) {
 
-                alert(
-                    "The game no longer exists."
-                );
-
-                window.location.href =
-                    "../index.html";
-
-                return;
-
-            }
-
-
-            const room =
-                snapshot.data();
-
-
-            if (!isHost) {
-
-                modifierSelect.value =
-                    room.modifier || "none";
-
-            }
-
-
-            if (
-                room.status === "playing"
-            ) {
-
-                window.location.href =
-                    `../game/game.html?room=${currentRoomCode}`;
-
-            }
-
-        },
-
-        error => {
-
-            console.error(
-                "Room listener error:",
-                error
+            alert(
+                "The game no longer exists."
             );
 
+            window.location.href =
+                "../index.html";
+
+            return;
         }
-    );
-```
+
+
+        const room = snapshot.data();
+
+
+        if (!isHost) {
+
+            modifierSelect.value =
+                room.modifier || "none";
+
+        }
+
+
+        if (room.status === "playing") {
+
+            window.location.href =
+                `../game/game.html?room=${currentRoomCode}`;
+
+        }
+
+    },
+
+    error => {
+
+        console.error(
+            "Room listener error:",
+            error
+        );
+
+    }
+);
+
 
 }
 
@@ -783,34 +597,26 @@ modifierSelect.addEventListener(
 "change",
 async () => {
 
-```
-    if (
-        !isHost ||
-        !currentRoomCode
-    ) {
 
+    if (!isHost || !currentRoomCode) {
         return;
-
     }
 
 
     try {
 
-        const roomRef =
-            doc(
-                db,
-                "rooms",
-                currentRoomCode
-            );
+        const roomRef = doc(
+            db,
+            "rooms",
+            currentRoomCode
+        );
 
 
         await updateDoc(
             roomRef,
             {
-
                 modifier:
                     modifierSelect.value
-
             }
         );
 
@@ -824,7 +630,7 @@ async () => {
     }
 
 }
-```
+
 
 );
 
@@ -839,26 +645,20 @@ startGame
 
 async function startGame() {
 
-```
-if (
-    !isHost ||
-    !currentRoomCode
-) {
 
+if (!isHost || !currentRoomCode) {
     return;
-
 }
 
 
 try {
 
-    const playersRef =
-        collection(
-            db,
-            "rooms",
-            currentRoomCode,
-            "players"
-        );
+    const playersRef = collection(
+        db,
+        "rooms",
+        currentRoomCode,
+        "players"
+    );
 
 
     const playersSnapshot =
@@ -872,38 +672,32 @@ try {
         );
 
         return;
-
     }
 
 
-    startButton.disabled =
-        true;
+    startButton.disabled = true;
 
     startButton.textContent =
         "STARTING...";
 
 
-    const roomRef =
-        doc(
-            db,
-            "rooms",
-            currentRoomCode
-        );
+    const roomRef = doc(
+        db,
+        "rooms",
+        currentRoomCode
+    );
 
 
     await updateDoc(
         roomRef,
         {
 
-            status:
-                "playing",
+            status: "playing",
 
-            currentRound:
-                1
+            currentRound: 1
 
         }
     );
-
 
 } catch (error) {
 
@@ -919,26 +713,25 @@ try {
     );
 
 
-    startButton.disabled =
-        false;
+    startButton.disabled = false;
 
     startButton.textContent =
         "START GAME";
 
 }
-```
+
 
 }
 
 // ==================================================
-// COPY CODE
+// COPY GAME CODE
 // ==================================================
 
 copyCodeButton.addEventListener(
 "click",
 async () => {
 
-```
+
     if (!currentRoomCode) {
         return;
     }
@@ -959,16 +752,12 @@ async () => {
             "COPIED!";
 
 
-        setTimeout(
-            () => {
+        setTimeout(() => {
 
-                copyCodeButton.textContent =
-                    oldText;
+            copyCodeButton.textContent =
+                oldText;
 
-            },
-            1500
-        );
-
+        }, 1500);
 
     } catch (error) {
 
@@ -980,12 +769,12 @@ async () => {
     }
 
 }
-```
+
 
 );
 
 // ==================================================
-// LEAVE
+// LEAVE GAME
 // ==================================================
 
 leaveButton.addEventListener(
@@ -995,7 +784,7 @@ leaveLobby
 
 async function leaveLobby() {
 
-```
+
 const confirmed =
     confirm(
         "Are you sure you want to leave?"
@@ -1009,39 +798,30 @@ if (!confirmed) {
 
 try {
 
-    if (
-        currentRoomCode &&
-        currentUser
-    ) {
+    if (currentRoomCode && currentUser) {
 
-        const playerRef =
-            doc(
-                db,
-                "rooms",
-                currentRoomCode,
-                "players",
-                currentUser.uid
-            );
-
-
-        await deleteDoc(
-            playerRef
+        const playerRef = doc(
+            db,
+            "rooms",
+            currentRoomCode,
+            "players",
+            currentUser.uid
         );
+
+
+        await deleteDoc(playerRef);
 
 
         if (isHost) {
 
-            const roomRef =
-                doc(
-                    db,
-                    "rooms",
-                    currentRoomCode
-                );
-
-
-            await deleteDoc(
-                roomRef
+            const roomRef = doc(
+                db,
+                "rooms",
+                currentRoomCode
             );
+
+
+            await deleteDoc(roomRef);
 
         }
 
@@ -1059,7 +839,7 @@ try {
 
 window.location.href =
     "../index.html";
-```
+
 
 }
 
@@ -1069,44 +849,36 @@ window.location.href =
 
 function resetJoinButton() {
 
-```
-joinLobbyButton.disabled =
-    false;
+
+joinLobbyButton.disabled = false;
 
 joinLobbyButton.textContent =
     "JOIN GAME";
-```
+
 
 }
 
 function generateRoomCode() {
 
-```
+
 const characters =
     "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
 
 let code = "";
 
 
-for (
-    let i = 0;
-    i < 6;
-    i++
-) {
+for (let i = 0; i < 6; i++) {
 
-    code +=
-        characters[
-            Math.floor(
-                Math.random() *
-                characters.length
-            )
-        ];
+    code += characters[
+        Math.floor(
+            Math.random() * characters.length
+        )
+    ];
 
 }
 
 
 return code;
-```
+
 
 }
