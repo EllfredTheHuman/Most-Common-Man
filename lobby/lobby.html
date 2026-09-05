@@ -1,15 +1,28 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 ```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
 <title>Lobby — Most Common Man</title>
 
-<link rel="stylesheet" href="../style.css">
-<link rel="stylesheet" href="lobby.css">
+<link
+    rel="stylesheet"
+    href="../style.css"
+>
+
+<link
+    rel="stylesheet"
+    href="lobby.css"
+>
 ```
 
 </head>
@@ -19,20 +32,39 @@
 ```
 <main class="lobby-screen">
 
-    <div class="lobby-decor lobby-star">✦</div>
-    <div class="lobby-decor lobby-dot">●</div>
+    <div class="lobby-decor lobby-star">
+        ✦
+    </div>
+
+    <div class="lobby-decor lobby-dot">
+        ●
+    </div>
+
 
     <section class="lobby-container">
 
+
+        <!-- HEADER -->
+
         <header class="lobby-header">
-            <p class="eyebrow">MOST COMMON MAN</p>
-            <h1>GAME LOBBY</h1>
+
+            <p class="eyebrow">
+                MOST COMMON MAN
+            </p>
+
+            <h1>
+                GAME LOBBY
+            </h1>
+
         </header>
 
 
         <!-- NAME ENTRY -->
 
-        <section class="name-section" id="nameSection">
+        <section
+            class="name-section"
+            id="nameSection"
+        >
 
             <label for="playerName">
                 WHAT'S YOUR NAME?
@@ -57,18 +89,21 @@
         </section>
 
 
-        <!-- LOBBY -->
+        <!-- LOBBY CONTENT -->
 
         <section
             class="lobby-content hidden"
             id="lobbyContent"
         >
 
+
             <!-- GAME CODE -->
 
             <div class="game-code-box">
 
-                <p>GAME CODE</p>
+                <p>
+                    GAME CODE
+                </p>
 
                 <div
                     class="game-code"
@@ -94,7 +129,9 @@
 
                 <div class="section-heading">
 
-                    <h2>PLAYERS</h2>
+                    <h2>
+                        PLAYERS
+                    </h2>
 
                     <span id="playerCount">
                         0/8
@@ -106,7 +143,7 @@
                     class="players-list"
                     id="playersList"
                 >
-                    <!-- Players appear here -->
+
                 </div>
 
             </div>
@@ -119,19 +156,25 @@
                 id="hostSettings"
             >
 
-                <h2>GAME SETTINGS</h2>
+                <h2>
+                    GAME SETTINGS
+                </h2>
+
 
                 <div class="setting">
 
                     <div>
 
-                        <strong>MODIFIER</strong>
+                        <strong>
+                            MODIFIER
+                        </strong>
 
                         <p>
                             Add an extra rule to the whole game.
                         </p>
 
                     </div>
+
 
                     <select id="modifierSelect">
 
@@ -179,6 +222,7 @@
                     START GAME
                 </button>
 
+
                 <button
                     class="secondary-button lobby-button"
                     id="leaveButton"
@@ -189,14 +233,13 @@
 
             </div>
 
+
         </section>
 
     </section>
 
 </main>
 
-
-<!-- FIREBASE + LOBBY LOGIC -->
 
 <script
     type="module"
@@ -205,4 +248,5 @@
 ```
 
 </body>
+
 </html>
