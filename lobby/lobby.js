@@ -17,7 +17,6 @@ serverTimestamp
 // ==================================================
 
 const urlParams = new URLSearchParams(window.location.search);
-
 const isHost = urlParams.get("host") === "true";
 
 let currentUser = null;
@@ -70,11 +69,11 @@ try {
     console.error("FIREBASE ERROR MESSAGE:", error.message);
 
     alert(
-        "Couldn't connect to Firebase.\n\n" +
+        "Could not connect to Firebase.\n\n" +
         "Error code: " +
         (error.code || "unknown") +
         "\n\n" +
-        "Check the browser console for the full error."
+        "Check the browser console for more information."
     );
 
     joinLobbyButton.disabled = true;
@@ -101,7 +100,7 @@ if (!name) {
 
     playerNameInput.classList.add("input-error");
 
-    setTimeout(() => {
+    setTimeout(function () {
 
         playerNameInput.classList.remove("input-error");
 
@@ -121,8 +120,8 @@ if (name.length > 20) {
 if (!currentUser) {
 
     alert(
-        "Firebase hasn't connected yet.\n\n" +
-        "Please check the browser console for the Firebase error."
+        "Firebase has not connected yet.\n\n" +
+        "Please check the browser console."
     );
 
     return;
@@ -168,7 +167,7 @@ try {
 // ENTER KEY
 // ==================================================
 
-playerNameInput.addEventListener("keydown", event => {
+playerNameInput.addEventListener("keydown", function (event) {
 
 ```
 if (event.key === "Enter") {
@@ -217,17 +216,11 @@ while (true) {
 await setDoc(
     roomRef,
     {
-
         hostId: currentUser.uid,
-
         status: "lobby",
-
         modifier: "none",
-
         currentRound: 0,
-
         createdAt: serverTimestamp()
-
     }
 );
 
@@ -244,21 +237,15 @@ const playerRef = doc(
 await setDoc(
     playerRef,
     {
-
         name: currentPlayerName,
-
         isHost: true,
-
         score: 0,
-
         joinedAt: serverTimestamp()
-
     }
 );
 
 
 currentRoomCode = roomCode;
-
 
 showLobby();
 
@@ -325,7 +312,7 @@ const roomSnapshot = await getDoc(roomRef);
 if (!roomSnapshot.exists()) {
 
     alert(
-        "Couldn't find that game.\n\n" +
+        "Could not find that game.\n\n" +
         "Check the code and try again."
     );
 
@@ -384,21 +371,15 @@ const playerRef = doc(
 await setDoc(
     playerRef,
     {
-
         name: currentPlayerName,
-
         isHost: false,
-
         score: 0,
-
         joinedAt: serverTimestamp()
-
     }
 );
 
 
 currentRoomCode = roomCode;
-
 
 showLobby();
 
@@ -473,33 +454,34 @@ const playersRef = collection(
 unsubscribePlayers = onSnapshot(
     playersRef,
 
-    snapshot => {
+    function (snapshot) {
 
         playersList.innerHTML = "";
 
         const players = [];
 
 
-        snapshot.forEach(playerDoc => {
+        snapshot.forEach(function (playerDoc) {
 
             players.push({
-
                 id: playerDoc.id,
-
                 ...playerDoc.data()
-
             });
 
         });
 
 
-        players.sort((a, b) => {
+        players.sort(function (a, b) {
 
             const aTime =
-                a.joinedAt?.seconds || 0;
+                a.joinedAt && a.joinedAt.seconds
+                    ? a.joinedAt.seconds
+                    : 0;
 
             const bTime =
-                b.joinedAt?.seconds || 0;
+                b.joinedAt && b.joinedAt.seconds
+                    ? b.joinedAt.seconds
+                    : 0;
 
             return aTime - bTime;
 
@@ -507,14 +489,13 @@ unsubscribePlayers = onSnapshot(
 
 
         playerCount.textContent =
-            `${players.length}/8`;
+            String(players.length) + "/8";
 
 
-        players.forEach(player => {
+        players.forEach(function (player) {
 
             const card =
                 document.createElement("div");
-
 
             card.className =
                 "player-card";
@@ -522,7 +503,6 @@ unsubscribePlayers = onSnapshot(
 
             const name =
                 document.createElement("span");
-
 
             name.textContent =
                 player.name;
@@ -536,14 +516,11 @@ unsubscribePlayers = onSnapshot(
                 const host =
                     document.createElement("span");
 
-
                 host.textContent =
                     "HOST";
 
-
                 host.className =
                     "player-host";
-
 
                 card.appendChild(host);
 
@@ -564,7 +541,7 @@ unsubscribePlayers = onSnapshot(
 
     },
 
-    error => {
+    function (error) {
 
         console.error(
             "PLAYER LISTENER ERROR:",
@@ -611,7 +588,7 @@ const roomRef = doc(
 unsubscribeRoom = onSnapshot(
     roomRef,
 
-    snapshot => {
+    function (snapshot) {
 
         if (!snapshot.exists()) {
 
@@ -640,13 +617,14 @@ unsubscribeRoom = onSnapshot(
         if (room.status === "playing") {
 
             window.location.href =
-                `../game/game.html?room=${currentRoomCode}`;
+                "../game/game.html?room=" +
+                currentRoomCode;
 
         }
 
     },
 
-    error => {
+    function (error) {
 
         console.error(
             "ROOM LISTENER ERROR:",
@@ -675,13 +653,12 @@ unsubscribeRoom = onSnapshot(
 
 modifierSelect.addEventListener(
 "change",
-async () => {
+async function () {
 
 ```
     if (!isHost || !currentRoomCode) {
 
         return;
-
     }
 
 
@@ -697,10 +674,8 @@ async () => {
         await updateDoc(
             roomRef,
             {
-
                 modifier:
                     modifierSelect.value
-
             }
         );
 
@@ -781,11 +756,8 @@ try {
     await updateDoc(
         roomRef,
         {
-
             status: "playing",
-
             currentRound: 1
-
         }
     );
 
@@ -808,7 +780,7 @@ try {
 
 
     alert(
-        "Couldn't start the game.\n\n" +
+        "Could not start the game.\n\n" +
         (error.message || "Unknown error.")
     );
 
@@ -829,7 +801,7 @@ try {
 
 copyCodeButton.addEventListener(
 "click",
-async () => {
+async function () {
 
 ```
     if (!currentRoomCode) {
@@ -853,7 +825,7 @@ async () => {
             "COPIED!";
 
 
-        setTimeout(() => {
+        setTimeout(function () {
 
             copyCodeButton.textContent =
                 oldText;
