@@ -17,6 +17,7 @@ serverTimestamp
 // ==================================================
 
 const urlParams = new URLSearchParams(window.location.search);
+
 const isHost = urlParams.get("host") === "true";
 
 let currentUser = null;
@@ -113,6 +114,7 @@ if (!name) {
 
 
 if (name.length > 20) {
+
     return;
 }
 
@@ -207,9 +209,7 @@ while (true) {
     if (!existingRoom.exists()) {
 
         break;
-
     }
-
 }
 
 
@@ -345,8 +345,7 @@ const playersRef = collection(
 );
 
 
-const playersSnapshot =
-    await getDocs(playersRef);
+const playersSnapshot = await getDocs(playersRef);
 
 
 if (playersSnapshot.size >= 8) {
@@ -439,7 +438,6 @@ function listenToPlayers() {
 if (unsubscribePlayers) {
 
     unsubscribePlayers();
-
 }
 
 
@@ -523,7 +521,6 @@ unsubscribePlayers = onSnapshot(
                     "player-host";
 
                 card.appendChild(host);
-
             }
 
 
@@ -574,7 +571,6 @@ function listenToRoom() {
 if (unsubscribeRoom) {
 
     unsubscribeRoom();
-
 }
 
 
