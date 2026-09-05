@@ -1,58 +1,34 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
-getAuth,
-signInAnonymously as firebaseSignInAnonymously
+    getAuth,
+    signInAnonymously
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
-getFirestore
+    getFirestore
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-// ==================================================
-// FIREBASE CONFIG
-// ==================================================
-
 const firebaseConfig = {
-apiKey: "AIzaSyCP35K-Urj4axmtcVfAe955x6lAeDK8YE",
-authDomain: "most-common-man.firebaseapp.com",
-projectId: "most-common-man",
-storageBucket: "most-common-man.firebasestorage.app",
-messagingSenderId: "1011338202971",
-appId: "1:1011338202971:web:98766ee07c2e380c60147e"
+    apiKey: "PASTE_YOUR_NEW_API_KEY_HERE",
+    authDomain: "most-common-man.firebaseapp.com",
+    projectId: "most-common-man",
+    storageBucket: "most-common-man.firebasestorage.app",
+    messagingSenderId: "1011338202971",
+    appId: "1:1011338202971:web:98766ee07c2e380c60147e"
 };
-
-// ==================================================
-// INITIALISE FIREBASE
-// ==================================================
 
 const app = initializeApp(firebaseConfig);
 
-// ==================================================
-// FIREBASE SERVICES
-// ==================================================
-
 export const auth = getAuth(app);
-
 export const db = getFirestore(app);
 
-// ==================================================
-// ANONYMOUS LOGIN
-// ==================================================
-
 export async function loginAnonymously() {
+    if (auth.currentUser) {
+        return auth.currentUser;
+    }
 
-if (auth.currentUser) {
+    const result = await signInAnonymously(auth);
 
-    return auth.currentUser;
-
-}
-
-
-const result =
-    await firebaseSignInAnonymously(auth);
-
-
-return result.user;
-
+    return result.user;
 }
