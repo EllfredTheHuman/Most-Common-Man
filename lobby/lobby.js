@@ -392,16 +392,6 @@ function listenToPlayers() {
 
                 card.appendChild(name);
 
-                if (player.isHost) {
-                    const host =
-                        document.createElement("span");
-
-                    host.textContent = "HOST";
-                    host.className = "player-host";
-
-                    card.appendChild(host);
-                }
-
                 playersList.appendChild(card);
             });
 
