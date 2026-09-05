@@ -54,22 +54,32 @@ const leaveButton = document.getElementById("leaveButton");
 // ==================================================
 
 async function initialiseFirebase() {
+
+```
 try {
-currentUser = await loginAnonymously();
+
+    currentUser = await loginAnonymously();
 
     console.log("Firebase connected.");
     console.log("User ID:", currentUser.uid);
 
 } catch (error) {
-    console.error("Firebase authentication failed:", error);
+
+    console.error("FIREBASE ERROR:", error);
+    console.error("FIREBASE ERROR CODE:", error.code);
+    console.error("FIREBASE ERROR MESSAGE:", error.message);
 
     alert(
         "Couldn't connect to Firebase.\n\n" +
-        "Make sure Anonymous Authentication is enabled."
+        "Error code: " +
+        (error.code || "unknown") +
+        "\n\n" +
+        "Check the browser console for the full error."
     );
 
     joinLobbyButton.disabled = true;
 }
+```
 
 }
 
@@ -83,14 +93,18 @@ joinLobbyButton.addEventListener("click", handleJoinButton);
 
 async function handleJoinButton() {
 
+```
 const name = playerNameInput.value.trim();
+
 
 if (!name) {
 
     playerNameInput.classList.add("input-error");
 
     setTimeout(() => {
+
         playerNameInput.classList.remove("input-error");
+
     }, 300);
 
     playerNameInput.focus();
@@ -98,44 +112,55 @@ if (!name) {
     return;
 }
 
+
 if (name.length > 20) {
     return;
 }
 
+
 if (!currentUser) {
 
     alert(
-        "Still connecting to Firebase.\n\n" +
-        "Please wait a moment and try again."
+        "Firebase hasn't connected yet.\n\n" +
+        "Please check the browser console for the Firebase error."
     );
 
     return;
 }
+
 
 currentPlayerName = name;
 
 joinLobbyButton.disabled = true;
 joinLobbyButton.textContent = "CONNECTING...";
 
+
 try {
 
     if (isHost) {
+
         await createGame();
+
     } else {
+
         await askForGameCode();
+
     }
 
 } catch (error) {
 
-    console.error("Lobby error:", error);
+    console.error("LOBBY ERROR:", error);
+    console.error("LOBBY ERROR CODE:", error.code);
+    console.error("LOBBY ERROR MESSAGE:", error.message);
 
     alert(
         "Something went wrong.\n\n" +
-        error.message
+        (error.message || "Unknown error.")
     );
 
     resetJoinButton();
 }
+```
 
 }
 
@@ -145,9 +170,13 @@ try {
 
 playerNameInput.addEventListener("keydown", event => {
 
+```
 if (event.key === "Enter") {
+
     handleJoinButton();
+
 }
+```
 
 });
 
@@ -157,8 +186,10 @@ if (event.key === "Enter") {
 
 async function createGame() {
 
+```
 let roomCode;
 let roomRef;
+
 
 while (true) {
 
@@ -170,31 +201,37 @@ while (true) {
         roomCode
     );
 
+
     const existingRoom = await getDoc(roomRef);
 
+
     if (!existingRoom.exists()) {
+
         break;
+
     }
+
 }
 
 
-// Create room
-await setDoc(roomRef, {
+await setDoc(
+    roomRef,
+    {
 
-    hostId: currentUser.uid,
+        hostId: currentUser.uid,
 
-    status: "lobby",
+        status: "lobby",
 
-    modifier: "none",
+        modifier: "none",
 
-    currentRound: 0,
+        currentRound: 0,
 
-    createdAt: serverTimestamp()
+        createdAt: serverTimestamp()
 
-});
+    }
+);
 
 
-// Add host to players
 const playerRef = doc(
     db,
     "rooms",
@@ -204,24 +241,29 @@ const playerRef = doc(
 );
 
 
-await setDoc(playerRef, {
+await setDoc(
+    playerRef,
+    {
 
-    name: currentPlayerName,
+        name: currentPlayerName,
 
-    isHost: true,
+        isHost: true,
 
-    score: 0,
+        score: 0,
 
-    joinedAt: serverTimestamp()
+        joinedAt: serverTimestamp()
 
-});
+    }
+);
 
 
 currentRoomCode = roomCode;
 
+
 showLobby();
 
 startListeners();
+```
 
 }
 
@@ -231,8 +273,9 @@ startListeners();
 
 async function askForGameCode() {
 
-
+```
 const code = prompt("ENTER GAME CODE");
+
 
 if (code === null) {
 
@@ -258,7 +301,7 @@ if (!/^[A-Z0-9]{6}$/.test(roomCode)) {
 
 
 await joinExistingGame(roomCode);
-
+```
 
 }
 
@@ -268,7 +311,7 @@ await joinExistingGame(roomCode);
 
 async function joinExistingGame(roomCode) {
 
-
+```
 const roomRef = doc(
     db,
     "rooms",
@@ -338,25 +381,29 @@ const playerRef = doc(
 );
 
 
-await setDoc(playerRef, {
+await setDoc(
+    playerRef,
+    {
 
-    name: currentPlayerName,
+        name: currentPlayerName,
 
-    isHost: false,
+        isHost: false,
 
-    score: 0,
+        score: 0,
 
-    joinedAt: serverTimestamp()
+        joinedAt: serverTimestamp()
 
-});
+    }
+);
 
 
 currentRoomCode = roomCode;
 
+
 showLobby();
 
 startListeners();
-
+```
 
 }
 
@@ -366,7 +413,7 @@ startListeners();
 
 function showLobby() {
 
-
+```
 nameSection.classList.add("hidden");
 
 lobbyContent.classList.remove("hidden");
@@ -383,7 +430,7 @@ if (isHost) {
     hostSettings.classList.add("hidden");
 
 }
-
+```
 
 }
 
@@ -393,11 +440,11 @@ if (isHost) {
 
 function startListeners() {
 
-
+```
 listenToPlayers();
 
 listenToRoom();
-
+```
 
 }
 
@@ -407,9 +454,11 @@ listenToRoom();
 
 function listenToPlayers() {
 
-
+```
 if (unsubscribePlayers) {
+
     unsubscribePlayers();
+
 }
 
 
@@ -434,8 +483,11 @@ unsubscribePlayers = onSnapshot(
         snapshot.forEach(playerDoc => {
 
             players.push({
+
                 id: playerDoc.id,
+
                 ...playerDoc.data()
+
             });
 
         });
@@ -463,12 +515,14 @@ unsubscribePlayers = onSnapshot(
             const card =
                 document.createElement("div");
 
+
             card.className =
                 "player-card";
 
 
             const name =
                 document.createElement("span");
+
 
             name.textContent =
                 player.name;
@@ -482,13 +536,17 @@ unsubscribePlayers = onSnapshot(
                 const host =
                     document.createElement("span");
 
+
                 host.textContent =
                     "HOST";
+
 
                 host.className =
                     "player-host";
 
+
                 card.appendChild(host);
+
             }
 
 
@@ -509,13 +567,23 @@ unsubscribePlayers = onSnapshot(
     error => {
 
         console.error(
-            "Player listener error:",
+            "PLAYER LISTENER ERROR:",
             error
+        );
+
+        console.error(
+            "PLAYER LISTENER CODE:",
+            error.code
+        );
+
+        console.error(
+            "PLAYER LISTENER MESSAGE:",
+            error.message
         );
 
     }
 );
-
+```
 
 }
 
@@ -525,9 +593,11 @@ unsubscribePlayers = onSnapshot(
 
 function listenToRoom() {
 
-
+```
 if (unsubscribeRoom) {
+
     unsubscribeRoom();
+
 }
 
 
@@ -579,13 +649,23 @@ unsubscribeRoom = onSnapshot(
     error => {
 
         console.error(
-            "Room listener error:",
+            "ROOM LISTENER ERROR:",
             error
+        );
+
+        console.error(
+            "ROOM LISTENER CODE:",
+            error.code
+        );
+
+        console.error(
+            "ROOM LISTENER MESSAGE:",
+            error.message
         );
 
     }
 );
-
+```
 
 }
 
@@ -597,9 +677,11 @@ modifierSelect.addEventListener(
 "change",
 async () => {
 
-
+```
     if (!isHost || !currentRoomCode) {
+
         return;
+
     }
 
 
@@ -615,22 +697,29 @@ async () => {
         await updateDoc(
             roomRef,
             {
+
                 modifier:
                     modifierSelect.value
+
             }
         );
 
     } catch (error) {
 
         console.error(
-            "Modifier update failed:",
+            "MODIFIER UPDATE ERROR:",
             error
+        );
+
+        console.error(
+            "MODIFIER ERROR CODE:",
+            error.code
         );
 
     }
 
 }
-
+```
 
 );
 
@@ -645,8 +734,9 @@ startGame
 
 async function startGame() {
 
-
+```
 if (!isHost || !currentRoomCode) {
+
     return;
 }
 
@@ -702,14 +792,24 @@ try {
 } catch (error) {
 
     console.error(
-        "Couldn't start game:",
+        "START GAME ERROR:",
         error
+    );
+
+    console.error(
+        "START GAME ERROR CODE:",
+        error.code
+    );
+
+    console.error(
+        "START GAME ERROR MESSAGE:",
+        error.message
     );
 
 
     alert(
         "Couldn't start the game.\n\n" +
-        error.message
+        (error.message || "Unknown error.")
     );
 
 
@@ -719,20 +819,21 @@ try {
         "START GAME";
 
 }
-
+```
 
 }
 
 // ==================================================
-// COPY GAME CODE
+// COPY CODE
 // ==================================================
 
 copyCodeButton.addEventListener(
 "click",
 async () => {
 
-
+```
     if (!currentRoomCode) {
+
         return;
     }
 
@@ -762,19 +863,19 @@ async () => {
     } catch (error) {
 
         console.error(
-            "Couldn't copy game code:",
+            "COPY ERROR:",
             error
         );
 
     }
 
 }
-
+```
 
 );
 
 // ==================================================
-// LEAVE GAME
+// LEAVE
 // ==================================================
 
 leaveButton.addEventListener(
@@ -784,7 +885,7 @@ leaveLobby
 
 async function leaveLobby() {
 
-
+```
 const confirmed =
     confirm(
         "Are you sure you want to leave?"
@@ -792,6 +893,7 @@ const confirmed =
 
 
 if (!confirmed) {
+
     return;
 }
 
@@ -830,7 +932,7 @@ try {
 } catch (error) {
 
     console.error(
-        "Leave error:",
+        "LEAVE ERROR:",
         error
     );
 
@@ -839,7 +941,7 @@ try {
 
 window.location.href =
     "../index.html";
-
+```
 
 }
 
@@ -849,18 +951,18 @@ window.location.href =
 
 function resetJoinButton() {
 
-
+```
 joinLobbyButton.disabled = false;
 
 joinLobbyButton.textContent =
     "JOIN GAME";
-
+```
 
 }
 
 function generateRoomCode() {
 
-
+```
 const characters =
     "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
@@ -879,6 +981,6 @@ for (let i = 0; i < 6; i++) {
 
 
 return code;
-
+```
 
 }
