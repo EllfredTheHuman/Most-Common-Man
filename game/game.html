@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Game — Most Common Man</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="game.css">
+</head>
+
+
+<body>
+
+    <main class="game-screen">
+
+        <!-- ================================
+             TOP BAR
+        ================================= -->
+
+        <header class="game-header">
+
+            <div class="game-title">
+                MOST COMMON MAN
+            </div>
+
+            <div class="round-counter">
+                ROUND <span id="roundNumber">1</span>/5
+            </div>
+
+        </header>
+
+
+        <!-- ================================
+             GAME CONTENT
+        ================================= -->
+
+        <section class="game-container">
+
+
+            <!-- ================================
+                 WAITING SCREEN
+            ================================= -->
+
+            <section
+                class="game-panel waiting-panel"
+                id="waitingPanel"
+            >
+
+                <div class="loading-dots">
+                    <span>●</span>
+                    <span>●</span>
+                    <span>●</span>
+                </div>
+
+                <h1>GET READY...</h1>
+
+                <p>
+                    The next question is coming.
+                </p>
+
+            </section>
+
+
+            <!-- ================================
+                 PROMPT SCREEN
+            ================================= -->
+
+            <section
+                class="game-panel prompt-panel hidden"
+                id="promptPanel"
+            >
+
+                <div class="prompt-category" id="promptCategory">
+                    EVERYDAY LIFE
+                </div>
+
+                <p class="prompt-label">
+                    YOUR QUESTION:
+                </p>
+
+                <h1 id="promptText">
+                    What is the most overrated thing?
+                </h1>
+
+
+                <div class="answer-area">
+
+                    <textarea
+                        id="answerInput"
+                        maxlength="150"
+                        placeholder="Type your answer..."
+                    ></textarea>
+
+                    <div class="answer-footer">
+
+                        <span id="characterCount">
+                            0/150
+                        </span>
+
+                        <button
+                            class="primary-button submit-button"
+                            id="submitAnswerButton"
+                            onclick="submitAnswer()"
+                        >
+                            LOCK IT IN
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================
+                 ANSWER LOCKED
+            ================================= -->
+
+            <section
+                class="game-panel locked-panel hidden"
+                id="lockedPanel"
+            >
+
+                <div class="locked-icon">
+                    ✓
+                </div>
+
+                <h1>LOCKED IN.</h1>
+
+                <p>
+                    Your answer has been submitted.
+                </p>
+
+                <div class="your-answer" id="lockedAnswer">
+                    Your answer
+                </div>
+
+                <p class="waiting-text">
+                    Waiting for everyone else...
+                </p>
+
+            </section>
+
+
+            <!-- ================================
+                 REVEAL SCREEN
+            ================================= -->
+
+            <section
+                class="game-panel reveal-panel hidden"
+                id="revealPanel"
+            >
+
+                <div class="prompt-category" id="revealCategory">
+                    EVERYDAY LIFE
+                </div>
+
+                <h1 id="revealPrompt">
+                    What is the most overrated thing?
+                </h1>
+
+                <p class="reveal-instruction">
+                    HERE ARE THE ANSWERS.
+                </p>
+
+
+                <div
+                    class="answers-list"
+                    id="answersList"
+                >
+                    <!-- Answers appear here -->
+                </div>
+
+
+                <button
+                    class="primary-button continue-button"
+                    onclick="continueToRanking()"
+                >
+                    RANK THEM
+                </button>
+
+            </section>
+
+
+            <!-- ================================
+                 RANKING SCREEN
+            ================================= -->
+
+            <section
+                class="game-panel ranking-panel hidden"
+                id="rankingPanel"
+            >
+
+                <div class="prompt-category">
+                    YOUR RANKING
+                </div>
+
+                <h1>
+                    BEST → WORST
+                </h1>
+
+                <p class="ranking-instruction">
+                    Drag the answers into your preferred order.
+                </p>
+
+
+                <div
+                    class="ranking-list"
+                    id="rankingList"
+                >
+                    <!-- Ranking cards appear here -->
+                </div>
+
+
+                <button
+                    class="primary-button continue-button"
+                    onclick="submitRanking()"
+                >
+                    SUBMIT RANKING
+                </button>
+
+            </section>
+
+
+            <!-- ================================
+                 ROUND RESULTS
+            ================================= -->
+
+            <section
+                class="game-panel results-panel hidden"
+                id="resultsPanel"
+            >
+
+                <div class="results-label">
+                    ROUND <span id="resultsRound">1</span>
+                </div>
+
+                <h1>
+                    THE RESULTS
+                </h1>
+
+
+                <div
+                    class="results-list"
+                    id="resultsList"
+                >
+                    <!-- Results appear here -->
+                </div>
+
+
+                <div class="round-score-box">
+
+                    <span>
+                        YOUR ROUND SCORE
+                    </span>
+
+                    <strong id="roundScore">
+                        +0
+                    </strong>
+
+                </div>
+
+
+                <button
+                    class="primary-button continue-button"
+                    onclick="nextRound()"
+                >
+                    NEXT ROUND
+                </button>
+
+            </section>
+
+
+            <!-- ================================
+                 FINAL RESULTS
+            ================================= -->
+
+            <section
+                class="game-panel final-panel hidden"
+                id="finalPanel"
+            >
+
+                <div class="final-eyebrow">
+                    AFTER FIVE ROUNDS...
+                </div>
+
+                <h1>
+                    WE HAVE A<br>
+                    WINNER.
+                </h1>
+
+
+                <div class="winner-box">
+
+                    <p>
+                        THE MOST COMMON MAN IS
+                    </p>
+
+                    <h2 id="winnerName">
+                        PLAYER
+                    </h2>
+
+                    <strong id="winnerScore">
+                        0 POINTS
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="final-rankings"
+                    id="finalRankings"
+                >
+                    <!-- Final leaderboard -->
+                </div>
+
+
+                <button
+                    class="primary-button continue-button"
+                    onclick="returnToTitle()"
+                >
+                    PLAY AGAIN
+                </button>
+
+            </section>
+
+
+        </section>
+
+
+        <!-- ================================
+             MODIFIER INDICATOR
+        ================================= -->
+
+        <div
+            class="modifier-indicator hidden"
+            id="modifierIndicator"
+        >
+
+            <span>MODIFIER</span>
+
+            <strong id="modifierName">
+                NONE
+            </strong>
+
+        </div>
+
+
+    </main>
+
+
+    <script src="../prompts/money.js"></script>
+    <script src="../prompts/everyday-life.js"></script>
+    <script src="../prompts/work.js"></script>
+    <script src="../prompts/food.js"></script>
+    <script src="../prompts/travel.js"></script>
+    <script src="../prompts/family.js"></script>
+    <script src="../prompts/sport.js"></script>
+    <script src="../prompts/moral-dilemmas.js"></script>
+    <script src="../prompts/ridiculous.js"></script>
+    <script src="../prompts/hamish-and-andy.js"></script>
+
+    <script src="game.js"></script>
+
+</body>
+
+</html>
