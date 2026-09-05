@@ -1,1171 +1,246 @@
-/* =================================
-   MOST COMMON MAN
-   Game Styles
-================================= */
-
-
-/* ================================
-   GAME SCREEN
-================================ */
-
 .game-screen {
     min-height: 100vh;
-    min-height: 100svh;
-
-    position: relative;
-    overflow-x: hidden;
-
-    padding: 20px;
-
-    background: var(--blue);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-
-/* ================================
-   HEADER
-================================ */
-
 .game-header {
-    width: min(100%, 1000px);
-
-    margin: 0 auto 25px;
-
+    width: min(900px, 100%);
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    gap: 15px;
+    gap: 20px;
+    margin-bottom: 30px;
 }
 
-
-.game-title {
-    font-family: "Baloo 2", sans-serif;
+.round-label {
+    font-weight: 900;
     font-size: 1.2rem;
-    font-weight: 800;
-
-    line-height: 1;
 }
 
-
-.round-counter {
-    padding: 8px 13px;
-
-    background: var(--white);
-
-    border: 3px solid var(--navy);
-    border-radius: 12px;
-
-    font-size: 0.8rem;
-    font-weight: 800;
-
-    box-shadow: 3px 3px 0 var(--navy);
+.modifier-indicator {
+    background: var(--off-white);
+    border: 3px solid var(--dark-navy);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 900;
+    font-size: 0.75rem;
+    box-shadow: 3px 3px 0 var(--dark-navy);
 }
-
-
-.round-counter span {
-    color: var(--coral);
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.15rem;
-}
-
-
-/* ================================
-   GAME CONTAINER
-================================ */
-
-.game-container {
-    width: min(100%, 850px);
-
-    margin: 0 auto;
-
-    position: relative;
-    z-index: 2;
-}
-
-
-/* ================================
-   GENERAL PANEL
-================================ */
 
 .game-panel {
-    width: 100%;
-
-    padding: 35px;
-
-    background: var(--white);
-
-    border: 5px solid var(--navy);
-    border-radius: 30px;
-
-    box-shadow: 9px 9px 0 var(--navy);
-
-    animation: panelAppear 0.25s ease;
-}
-
-
-@keyframes panelAppear {
-
-    from {
-        opacity: 0;
-        transform: scale(0.96) rotate(-1deg);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-    }
-
-}
-
-
-.hidden {
-    display: none !important;
-}
-
-
-/* ================================
-   WAITING SCREEN
-================================ */
-
-.waiting-panel {
-    min-height: 450px;
-
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-    align-items: center;
-
+    width: min(900px, 100%);
+    box-sizing: border-box;
+    background: var(--off-white);
+    border: 4px solid var(--dark-navy);
+    border-radius: 28px;
+    padding: 42px;
+    box-shadow: 8px 8px 0 var(--dark-navy);
     text-align: center;
 }
 
-
-.waiting-panel h1 {
-    margin: 20px 0 10px;
-
-    font-size: clamp(3rem, 9vw, 5rem);
-
-    line-height: 0.8;
-
-    text-shadow: 4px 4px 0 var(--blue);
+.game-panel h1 {
+    margin: 18px auto 28px;
+    max-width: 760px;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 0.98;
 }
 
+.big-icon {
+    font-size: 4rem;
+}
 
-.waiting-panel p {
-    font-size: 1rem;
-    font-weight: 700;
-
+.small-text,
+.instruction {
     opacity: 0.7;
+    font-weight: 700;
 }
 
-
-/* ================================
-   LOADING DOTS
-================================ */
-
-.loading-dots {
-    display: flex;
-
-    gap: 8px;
-}
-
-
-.loading-dots span {
-    font-size: 1.2rem;
-
-    animation: dotBounce 1s infinite ease-in-out;
-}
-
-
-.loading-dots span:nth-child(2) {
-    animation-delay: 0.15s;
-}
-
-
-.loading-dots span:nth-child(3) {
-    animation-delay: 0.3s;
-}
-
-
-@keyframes dotBounce {
-
-    0%,
-    60%,
-    100% {
-        transform: translateY(0);
-    }
-
-    30% {
-        transform: translateY(-10px) rotate(8deg);
-    }
-
-}
-
-
-/* ================================
-   PROMPT PANEL
-================================ */
-
-.prompt-panel {
-    text-align: center;
-}
-
-
-.prompt-category {
+.category-pill {
     display: inline-block;
-
-    padding: 6px 12px;
-
-    margin-bottom: 20px;
-
     background: var(--yellow);
-
-    border: 3px solid var(--navy);
-    border-radius: 10px;
-
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 1px;
-
-    transform: rotate(-2deg);
+    border: 3px solid var(--dark-navy);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 900;
+    box-shadow: 3px 3px 0 var(--dark-navy);
 }
 
-
-.prompt-label {
-    margin-bottom: 8px;
-
-    font-size: 0.75rem;
-    font-weight: 800;
-
-    letter-spacing: 2px;
-
-    opacity: 0.6;
-}
-
-
-.prompt-panel h1 {
-    margin: 0 auto 30px;
-
-    max-width: 700px;
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: clamp(2.4rem, 7vw, 4.5rem);
-    font-weight: 800;
-
-    line-height: 0.95;
-
-    text-shadow: 4px 4px 0 var(--blue);
-}
-
-
-/* ================================
-   ANSWER AREA
-================================ */
-
-.answer-area {
-    width: min(100%, 650px);
-
+.answer-box {
     margin: 0 auto;
-
-    padding: 15px;
-
-    background: var(--blue);
-
-    border: 4px solid var(--navy);
-    border-radius: 20px;
+    max-width: 720px;
 }
 
-
-.answer-area textarea {
-    display: block;
-
+#answerInput {
     width: 100%;
     min-height: 150px;
-
+    box-sizing: border-box;
     resize: vertical;
-
-    padding: 15px;
-
-    border: 3px solid var(--navy);
-    border-radius: 14px;
-
-    background: var(--white);
-
-    color: var(--navy);
-
-    font-family: "Nunito", sans-serif;
-    font-size: 1.05rem;
+    padding: 18px;
+    border: 4px solid var(--dark-navy);
+    border-radius: 18px;
+    background: white;
+    color: var(--dark-navy);
+    font: inherit;
+    font-size: 1.2rem;
     font-weight: 700;
-
     outline: none;
 }
 
-
-.answer-area textarea:focus {
-    box-shadow: 4px 4px 0 var(--yellow);
-}
-
-
-.answer-area textarea::placeholder {
-    color: var(--navy);
-    opacity: 0.45;
-}
-
-
 .answer-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    gap: 15px;
-
     margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
 }
-
 
 #characterCount {
-    font-size: 0.8rem;
-    font-weight: 800;
-
-    opacity: 0.65;
+    font-weight: 900;
 }
 
-
-.submit-button {
-    width: auto;
-
-    min-width: 150px;
-    min-height: 52px;
-
-    margin: 0;
-
-    padding: 8px 18px;
-
-    border: 4px solid var(--navy);
-    border-radius: 14px;
-
-    background: var(--yellow);
-
-    color: var(--navy);
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.1rem;
-    font-weight: 800;
-
-    cursor: pointer;
-
-    box-shadow: 0 5px 0 var(--navy);
-
-    transition:
-        transform 0.12s ease,
-        box-shadow 0.12s ease;
-}
-
-
-.submit-button:hover {
-    transform: translateY(-2px) rotate(-1deg);
-
-    box-shadow: 0 7px 0 var(--navy);
-}
-
-
-.submit-button:active {
-    transform: translateY(3px);
-
-    box-shadow: 0 2px 0 var(--navy);
-}
-
-
-/* ================================
-   LOCKED SCREEN
-================================ */
-
-.locked-panel {
-    min-height: 450px;
-
+.answers-list,
+.ranking-list,
+.results-list,
+.leaderboard {
     display: flex;
     flex-direction: column;
-
-    justify-content: center;
-    align-items: center;
-
-    text-align: center;
+    gap: 12px;
+    max-width: 720px;
+    margin: 0 auto;
 }
 
-
-.locked-icon {
-    width: 75px;
-    height: 75px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    margin-bottom: 20px;
-
-    background: var(--green);
-
-    border: 5px solid var(--navy);
-    border-radius: 50%;
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: 2.5rem;
-    font-weight: 800;
-
-    box-shadow: 5px 5px 0 var(--navy);
-
-    transform: rotate(-5deg);
-}
-
-
-.locked-panel h1 {
-    margin-bottom: 8px;
-
-    font-size: clamp(3rem, 9vw, 5rem);
-
-    line-height: 0.8;
-
-    text-shadow: 4px 4px 0 var(--green);
-}
-
-
-.locked-panel p {
-    font-weight: 700;
-
-    opacity: 0.7;
-}
-
-
-.your-answer {
-    width: min(100%, 500px);
-
-    margin: 25px 0;
-
-    padding: 18px;
-
-    background: var(--blue);
-
-    border: 4px solid var(--navy);
+.answer-card,
+.ranking-card,
+.result-card,
+.leaderboard-row {
+    width: 100%;
+    box-sizing: border-box;
+    background: white;
+    border: 3px solid var(--dark-navy);
     border-radius: 16px;
-
+    padding: 16px;
     font-weight: 800;
-
-    word-break: break-word;
 }
-
-
-.waiting-text {
-    font-size: 0.85rem;
-
-    animation: waitingPulse 1.5s infinite ease-in-out;
-}
-
-
-@keyframes waitingPulse {
-
-    0%,
-    100% {
-        opacity: 0.45;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-}
-
-
-/* ================================
-   REVEAL PANEL
-================================ */
-
-.reveal-panel {
-    text-align: center;
-}
-
-
-.reveal-panel h1 {
-    max-width: 700px;
-
-    margin: 0 auto 20px;
-
-    font-size: clamp(2.3rem, 7vw, 4rem);
-
-    line-height: 0.9;
-}
-
-
-.reveal-instruction {
-    margin-bottom: 25px;
-
-    font-size: 0.8rem;
-    font-weight: 800;
-
-    letter-spacing: 2px;
-
-    opacity: 0.6;
-}
-
-
-/* ================================
-   ANSWERS LIST
-================================ */
-
-.answers-list {
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-
-    width: min(100%, 650px);
-
-    margin: 0 auto 25px;
-}
-
 
 .answer-card {
-    padding: 17px 20px;
-
-    background: var(--blue);
-
-    border: 4px solid var(--navy);
-    border-radius: 16px;
-
     text-align: left;
-
-    font-size: 1rem;
-    font-weight: 800;
-
-    box-shadow: 3px 3px 0 var(--navy);
-
-    animation: answerAppear 0.25s ease both;
 }
-
-
-.answer-card:nth-child(2) {
-    animation-delay: 0.05s;
-}
-
-
-.answer-card:nth-child(3) {
-    animation-delay: 0.1s;
-}
-
-
-.answer-card:nth-child(4) {
-    animation-delay: 0.15s;
-}
-
-
-.answer-card:nth-child(5) {
-    animation-delay: 0.2s;
-}
-
-
-@keyframes answerAppear {
-
-    from {
-        opacity: 0;
-        transform: translateX(-15px) rotate(-1deg);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0) rotate(0);
-    }
-
-}
-
-
-/* ================================
-   RANKING
-================================ */
-
-.ranking-panel {
-    text-align: center;
-}
-
-
-.ranking-panel h1 {
-    margin-bottom: 8px;
-
-    font-size: clamp(2.8rem, 8vw, 4.5rem);
-
-    line-height: 0.85;
-
-    text-shadow: 4px 4px 0 var(--purple);
-}
-
-
-.ranking-instruction {
-    margin-bottom: 25px;
-
-    font-size: 0.9rem;
-    font-weight: 700;
-
-    opacity: 0.65;
-}
-
-
-.ranking-list {
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-
-    width: min(100%, 650px);
-
-    margin: 0 auto 25px;
-
-    counter-reset: ranking;
-}
-
 
 .ranking-card {
     display: flex;
     align-items: center;
-
-    gap: 15px;
-
-    padding: 13px;
-
-    background: var(--white);
-
-    border: 4px solid var(--navy);
-    border-radius: 16px;
-
-    text-align: left;
-
+    gap: 14px;
     cursor: grab;
-
+    text-align: left;
+    font: inherit;
+    color: inherit;
     user-select: none;
-
-    box-shadow: 3px 3px 0 var(--navy);
-
-    transition:
-        transform 0.12s ease,
-        background 0.12s ease;
 }
-
-
-.ranking-card:hover {
-    transform: rotate(-1deg);
-    background: var(--blue);
-}
-
 
 .ranking-card:active {
     cursor: grabbing;
 }
 
-
-.ranking-number {
-    width: 42px;
-    height: 42px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: var(--yellow);
-
-    border: 3px solid var(--navy);
-    border-radius: 10px;
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.3rem;
-    font-weight: 800;
+.ranking-position {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--light-blue);
+    border: 2px solid var(--dark-navy);
+    font-weight: 900;
 }
-
-
-.ranking-answer {
-    font-size: 0.95rem;
-    font-weight: 800;
-
-    word-break: break-word;
-}
-
-
-/* ================================
-   CONTINUE BUTTON
-================================ */
-
-.continue-button {
-    width: min(100%, 400px);
-
-    min-height: 58px;
-
-    display: block;
-
-    margin: 0 auto;
-
-    border: 4px solid var(--navy);
-    border-radius: 16px;
-
-    background: var(--green);
-
-    color: var(--navy);
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.25rem;
-    font-weight: 800;
-
-    cursor: pointer;
-
-    box-shadow: 0 5px 0 var(--navy);
-
-    transition:
-        transform 0.12s ease,
-        box-shadow 0.12s ease;
-}
-
-
-.continue-button:hover {
-    transform: translateY(-2px) rotate(-1deg);
-
-    box-shadow: 0 7px 0 var(--navy);
-}
-
-
-.continue-button:active {
-    transform: translateY(3px);
-
-    box-shadow: 0 2px 0 var(--navy);
-}
-
-
-/* ================================
-   RESULTS
-================================ */
-
-.results-panel {
-    text-align: center;
-}
-
-
-.results-label {
-    display: inline-block;
-
-    padding: 6px 12px;
-
-    margin-bottom: 15px;
-
-    background: var(--coral);
-
-    border: 3px solid var(--navy);
-    border-radius: 10px;
-
-    font-size: 0.75rem;
-    font-weight: 800;
-
-    transform: rotate(2deg);
-}
-
-
-.results-panel h1 {
-    margin-bottom: 25px;
-
-    font-size: clamp(3rem, 9vw, 5rem);
-
-    line-height: 0.8;
-
-    text-shadow: 4px 4px 0 var(--yellow);
-}
-
-
-.results-list {
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-
-    width: min(100%, 600px);
-
-    margin: 0 auto 25px;
-}
-
 
 .result-card {
     display: grid;
-
     grid-template-columns: 55px 1fr auto;
-
+    gap: 10px;
     align-items: center;
-
-    gap: 12px;
-
-    padding: 12px 15px;
-
-    background: var(--blue);
-
-    border: 4px solid var(--navy);
-    border-radius: 15px;
-
     text-align: left;
 }
 
-
-.result-position {
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.5rem;
-    font-weight: 800;
+.result-card small {
+    grid-column: 2;
+    opacity: 0.6;
 }
 
-
-.result-name {
-    font-weight: 800;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.result-card b {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    font-size: 1.3rem;
 }
 
-
-.result-points {
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.25rem;
-    font-weight: 800;
-
-    white-space: nowrap;
-}
-
-
-.round-score-box {
-    width: min(100%, 400px);
-
-    margin: 0 auto 25px;
-
-    padding: 18px;
-
-    background: var(--yellow);
-
-    border: 4px solid var(--navy);
-    border-radius: 18px;
-
-    box-shadow: 4px 4px 0 var(--navy);
-}
-
-
-.round-score-box span {
-    display: block;
-
-    font-size: 0.75rem;
-    font-weight: 800;
-
-    letter-spacing: 1px;
-}
-
-
-.round-score-box strong {
-    display: block;
-
-    margin-top: 3px;
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: 2.5rem;
-    font-weight: 800;
-}
-
-
-/* ================================
-   FINAL RESULTS
-================================ */
-
-.final-panel {
-    text-align: center;
-
-    padding-top: 45px;
-}
-
-
-.final-eyebrow {
-    margin-bottom: 12px;
-
-    font-size: 0.8rem;
-    font-weight: 800;
-
-    letter-spacing: 2px;
-
-    opacity: 0.65;
-}
-
-
-.final-panel > h1 {
-    margin-bottom: 30px;
-
-    font-size: clamp(3.2rem, 10vw, 6rem);
-
-    line-height: 0.78;
-
-    text-shadow: 5px 5px 0 var(--coral);
-}
-
-
-.winner-box {
-    width: min(100%, 600px);
-
-    margin: 0 auto 25px;
-
-    padding: 25px;
-
-    background: var(--yellow);
-
-    border: 5px solid var(--navy);
-    border-radius: 22px;
-
-    box-shadow: 7px 7px 0 var(--navy);
-
-    transform: rotate(-1deg);
-}
-
-
-.winner-box p {
-    margin-bottom: 5px;
-
-    font-size: 0.8rem;
-    font-weight: 800;
-
-    letter-spacing: 1px;
-}
-
-
-.winner-box h2 {
-    margin-bottom: 5px;
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: clamp(2.5rem, 8vw, 4rem);
-    font-weight: 800;
-
-    line-height: 0.9;
-
-    word-break: break-word;
-}
-
-
-.winner-box strong {
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.4rem;
-}
-
-
-/* ================================
-   FINAL LEADERBOARD
-================================ */
-
-.final-rankings {
-    width: min(100%, 600px);
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 8px;
-
-    margin: 0 auto 25px;
-}
-
-
-.final-rank-card {
-    display: flex;
-    justify-content: space-between;
+.leaderboard-row {
+    display: grid;
+    grid-template-columns: 55px 1fr auto;
+    gap: 10px;
     align-items: center;
-
-    gap: 15px;
-
-    padding: 12px 15px;
-
-    background: var(--white);
-
-    border: 3px solid var(--navy);
-    border-radius: 13px;
-
-    font-weight: 800;
+    text-align: left;
 }
 
-
-.final-rank-card:first-child {
-    background: var(--green);
-
-    border-width: 4px;
+.winner-card {
+    max-width: 600px;
+    margin: 0 auto 28px;
+    padding: 28px;
+    background: var(--yellow);
+    border: 4px solid var(--dark-navy);
+    border-radius: 24px;
+    box-shadow: 6px 6px 0 var(--dark-navy);
 }
 
-
-.final-rank-name {
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.winner-name {
+    font-size: clamp(2rem, 7vw, 4rem);
+    font-weight: 1000;
 }
 
-
-.final-rank-score {
-    font-family: "Baloo 2", sans-serif;
-
-    white-space: nowrap;
+.winner-score {
+    margin-top: 8px;
+    font-weight: 900;
 }
 
-
-/* ================================
-   MODIFIER INDICATOR
-================================ */
-
-.modifier-indicator {
-    position: fixed;
-
-    left: 20px;
-    bottom: 20px;
-
-    z-index: 10;
-
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-
-    padding: 8px 12px;
-
-    background: var(--purple);
-
-    border: 3px solid var(--navy);
-    border-radius: 12px;
-
-    box-shadow: 3px 3px 0 var(--navy);
-
-    transform: rotate(-2deg);
+.winner-score span {
+    font-size: 2rem;
 }
 
-
-.modifier-indicator span {
-    font-size: 0.65rem;
-    font-weight: 800;
-
-    opacity: 0.65;
+.wide-button {
+    width: 100%;
+    margin-top: 22px;
 }
 
-
-.modifier-indicator strong {
-    font-family: "Baloo 2", sans-serif;
-    font-size: 0.9rem;
+.hidden {
+    display: none !important;
 }
-
-
-/* ================================
-   MOBILE
-================================ */
 
 @media (max-width: 600px) {
 
     .game-screen {
-        padding: 12px;
+        padding: 14px;
     }
 
-
     .game-header {
+        align-items: flex-start;
+        flex-direction: column;
         margin-bottom: 18px;
     }
 
-
-    .game-title {
-        font-size: 0.9rem;
-    }
-
-
-    .round-counter {
-        padding: 7px 10px;
-
-        font-size: 0.7rem;
-    }
-
-
     .game-panel {
-        padding: 25px 18px;
-
-        border-width: 4px;
-
+        padding: 24px 18px;
         border-radius: 22px;
-
-        box-shadow: 6px 6px 0 var(--navy);
+        box-shadow: 5px 5px 0 var(--dark-navy);
     }
-
-
-    .waiting-panel,
-    .locked-panel {
-        min-height: 420px;
-    }
-
-
-    .prompt-panel h1 {
-        margin-bottom: 22px;
-    }
-
-
-    .answer-area {
-        padding: 10px;
-
-        border-width: 3px;
-    }
-
-
-    .answer-area textarea {
-        min-height: 130px;
-
-        padding: 12px;
-    }
-
 
     .answer-footer {
-        flex-direction: column;
         align-items: stretch;
+        flex-direction: column;
     }
-
-
-    #characterCount {
-        text-align: right;
-    }
-
-
-    .submit-button {
-        width: 100%;
-    }
-
-
-    .answer-card {
-        padding: 14px;
-
-        border-width: 3px;
-    }
-
-
-    .ranking-card {
-        gap: 10px;
-
-        padding: 10px;
-
-        border-width: 3px;
-    }
-
-
-    .ranking-number {
-        width: 38px;
-        height: 38px;
-    }
-
 
     .result-card {
-        grid-template-columns: 40px 1fr auto;
-
-        padding: 10px;
-
-        border-width: 3px;
-    }
-
-
-    .modifier-indicator {
-        left: 10px;
-        bottom: 10px;
+        grid-template-columns: 42px 1fr auto;
     }
 
 }
