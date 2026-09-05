@@ -10,7 +10,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "PASTE_YOUR_NEW_API_KEY_HERE",
+    apiKey: "AIzaSyCP35K2-Urj4axmtcVfAe955x6lAeDK8YE",
     authDomain: "most-common-man.firebaseapp.com",
     projectId: "most-common-man",
     storageBucket: "most-common-man.firebasestorage.app",
