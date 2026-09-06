@@ -1,69 +1,203 @@
+const createGameButton = document.getElementById("createGameButton");
+const joinGameButton = document.getElementById("joinGameButton");
+const howToPlayButton = document.getElementById("howToPlayButton");
+
+const howToPlayModal = document.getElementById("howToPlayModal");
+const joinGameModal = document.getElementById("joinGameModal");
+
+const closeHowToPlayButton = document.getElementById("closeHowToPlay");
+const gotItButton = document.getElementById("gotItButton");
+
+const closeJoinGameButton = document.getElementById("closeJoinGame");
+const cancelJoinButton = document.getElementById("cancelJoinButton");
+const confirmJoinButton = document.getElementById("confirmJoinButton");
+
+const gameCodeInput = document.getElementById("gameCodeInput");
+const joinError = document.getElementById("joinError");
+
+
+function openModal(modal) {
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+}
+
+
+function closeModal(modal) {
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+}
+
+
 function createGame() {
     window.location.href = "lobby/lobby.html?host=true";
 }
 
-function joinGame() {
-    document.getElementById("joinGameModal").classList.add("active");
-    document.getElementById("gameCodeInput").value = "";
+
+function openJoinGame() {
+    gameCodeInput.value = "";
+    joinError.textContent = "";
+
+    openModal(joinGameModal);
+
     setTimeout(function () {
-        document.getElementById("gameCodeInput").focus();
-    }, 80);
+        gameCodeInput.focus();
+    }, 100);
 }
 
-function closeJoinGame() {
-    document.getElementById("joinGameModal").classList.remove("active");
-}
 
-function submitJoinGame() {
-    const input = document.getElementById("gameCodeInput");
-    const code = input.value.trim().toUpperCase();
+function joinGame() {
+    const code = gameCodeInput.value
+        .trim()
+        .toUpperCase();
 
     if (!/^[A-Z0-9]{6}$/.test(code)) {
-        input.classList.remove("input-error");
-        void input.offsetWidth;
-        input.classList.add("input-error");
-        document.getElementById("joinGameError").textContent = "Enter the 6-character game code.";
-        input.focus();
+        joinError.textContent =
+            "Enter a 6-character game code.";
+
+        gameCodeInput.classList.remove("input-error");
+
+        void gameCodeInput.offsetWidth;
+
+        gameCodeInput.classList.add("input-error");
+
+        gameCodeInput.focus();
+
         return;
     }
 
-    window.location.href = "lobby/lobby.html?code=" + encodeURIComponent(code);
+    window.location.href =
+        "lobby/lobby.html?room=" +
+        encodeURIComponent(code);
 }
+
 
 function showHowToPlay() {
-    document.getElementById("howToPlayModal").classList.add("active");
+    openModal(howToPlayModal);
 }
 
-function closeHowToPlay() {
-    document.getElementById("howToPlayModal").classList.remove("active");
+
+if (createGameButton) {
+    createGameButton.addEventListener(
+        "click",
+        createGame
+    );
 }
 
-document.getElementById("gameCodeInput").addEventListener("input", function () {
-    this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
-    document.getElementById("joinGameError").textContent = "";
-});
 
-document.getElementById("gameCodeInput").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        submitJoinGame();
-    }
-});
+if (joinGameButton) {
+    joinGameButton.addEventListener(
+        "click",
+        openJoinGame
+    );
+}
 
-document.getElementById("howToPlayModal").addEventListener("click", function (event) {
-    if (event.target === this) {
-        closeHowToPlay();
-    }
-});
 
-document.getElementById("joinGameModal").addEventListener("click", function (event) {
-    if (event.target === this) {
-        closeJoinGame();
-    }
-});
+if (howToPlayButton) {
+    howToPlayButton.addEventListener(
+        "click",
+        showHowToPlay
+    );
+}
 
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-        closeHowToPlay();
-        closeJoinGame();
+
+closeHowToPlayButton.addEventListener(
+    "click",
+    function () {
+        closeModal(howToPlayModal);
     }
-});
+);
+
+
+gotItButton.addEventListener(
+    "click",
+    function () {
+        closeModal(howToPlayModal);
+    }
+);
+
+
+closeJoinGameButton.addEventListener(
+    "click",
+    function () {
+        closeModal(joinGameModal);
+    }
+);
+
+
+cancelJoinButton.addEventListener(
+    "click",
+    function () {
+        closeModal(joinGameModal);
+    }
+);
+
+
+confirmJoinButton.addEventListener(
+    "click",
+    joinGame
+);
+
+
+gameCodeInput.addEventListener(
+    "input",
+    function () {
+        gameCodeInput.value =
+            gameCodeInput.value
+                .replace(/[^a-zA-Z0-9]/g, "")
+                .slice(0, 6)
+                .toUpperCase();
+
+        joinError.textContent = "";
+    }
+);
+
+
+gameCodeInput.addEventListener(
+    "keydown",
+    function (event) {
+        if (event.key === "Enter") {
+            joinGame();
+        }
+    }
+);
+
+
+howToPlayModal.addEventListener(
+    "click",
+    function (event) {
+        if (event.target === howToPlayModal) {
+            closeModal(howToPlayModal);
+        }
+    }
+);
+
+
+joinGameModal.addEventListener(
+    "click",
+    function (event) {
+        if (event.target === joinGameModal) {
+            closeModal(joinGameModal);
+        }
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+        if (event.key !== "Escape") {
+            return;
+        }
+
+        closeModal(howToPlayModal);
+        closeModal(joinGameModal);
+    }
+);
