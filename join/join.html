@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Join Game — Most Common Man</title>
+
+    <link rel="stylesheet" href="join.css">
+</head>
+
+<body>
+
+    <main class="join-page">
+
+        <header>
+            <h1>JOIN GAME</h1>
+            <p>Enter the code your host gave you.</p>
+        </header>
+
+        <section class="join-card">
+
+            <label for="playerName">YOUR NAME</label>
+
+            <input
+                type="text"
+                id="playerName"
+                maxlength="20"
+                placeholder="Enter your name"
+                autocomplete="off"
+            >
+
+            <label for="gameCode">GAME CODE</label>
+
+            <input
+                type="text"
+                id="gameCode"
+                maxlength="6"
+                placeholder="ABC123"
+                autocomplete="off"
+                spellcheck="false"
+            >
+
+            <p id="errorMessage" class="error hidden"></p>
+
+            <button id="joinGame">
+                JOIN GAME
+            </button>
+
+            <button id="backButton" class="secondary">
+                BACK
+            </button>
+
+        </section>
+
+    </main>
+
+    <script type="module" src="join.js"></script>
+
+</body>
+</html>
