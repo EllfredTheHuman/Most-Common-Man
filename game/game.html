@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Most Common Man</title>
+
+    <link rel="stylesheet" href="game.css">
+</head>
+
+<body>
+
+    <main class="game">
+
+        <header class="game-header">
+            <div>
+                <span class="label">ROUND</span>
+                <strong id="roundNumber">1</strong>
+                <span> / 5</span>
+            </div>
+
+            <div id="timer">--</div>
+
+            <div>
+                <span class="label">SCORE</span>
+                <strong id="score">0</strong>
+            </div>
+        </header>
+
+        <section id="questionScreen" class="screen">
+
+            <p class="eyebrow">EVERYONE ANSWERS</p>
+
+            <h1 id="question">
+                Loading question...
+            </h1>
+
+            <textarea
+                id="answerInput"
+                maxlength="200"
+                placeholder="What's your answer?"
+                autocomplete="off"
+            ></textarea>
+
+            <div class="answer-footer">
+                <span id="characterCount">0 / 200</span>
+
+                <button id="submitAnswer">
+                    SUBMIT ANSWER
+                </button>
+            </div>
+
+        </section>
+
+        <section id="waitingScreen" class="screen hidden">
+
+            <div class="waiting-card">
+                <div class="waiting-icon">✓</div>
+
+                <h1>ANSWER LOCKED IN</h1>
+
+                <p>
+                    Waiting for everyone else...
+                </p>
+
+                <div class="progress">
+                    <span id="answeredCount">0</span>
+                    /
+                    <span id="totalPlayers">0</span>
+                    answered
+                </div>
+            </div>
+
+        </section>
+
+        <section id="rankingScreen" class="screen hidden">
+
+            <p class="eyebrow">RANK THE ANSWERS</p>
+
+            <h1>Which one is the most common?</h1>
+
+            <p class="instructions">
+                Rank the answers from most common to least common.
+            </p>
+
+            <div id="answersList" class="answers-list">
+                <!-- Anonymous answers will appear here -->
+            </div>
+
+            <button id="submitRanking" disabled>
+                SUBMIT RANKING
+            </button>
+
+        </section>
+
+        <section id="resultsScreen" class="screen hidden">
+
+            <p class="eyebrow">ROUND RESULTS</p>
+
+            <h1 id="resultsTitle">THE RESULTS ARE IN</h1>
+
+            <div id="resultsList" class="results-list">
+                <!-- Results will appear here -->
+            </div>
+
+            <button id="nextRound" class="hidden">
+                NEXT ROUND
+            </button>
+
+        </section>
+
+    </main>
+
+    <script type="module" src="game.js"></script>
+
+</body>
+</html>
