@@ -13,12 +13,12 @@ import {
 // FIREBASE CONFIG
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.firebasestorage.app",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCP35K2-Urj4axmtcVfAe955x6lAeDK8YE",
+    authDomain: "most-common-man.firebaseapp.com",
+    projectId: "most-common-man",
+    storageBucket: "most-common-man.firebasestorage.app",
+    messagingSenderId: "1011338202971",
+    appId: "1:1011338202971:web:98766ee07c2e380c60147e"
 };
 
 
