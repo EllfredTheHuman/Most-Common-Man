@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Game — Most Common Man</title>
+
+    <link rel="stylesheet" href="create.css">
+</head>
+
+<body>
+
+    <main class="create-page">
+
+        <header>
+            <h1>CREATE GAME</h1>
+            <p>First things first. What's your name?</p>
+        </header>
+
+        <section class="create-card">
+
+            <label for="playerName">YOUR NAME</label>
+
+            <input
+                type="text"
+                id="playerName"
+                maxlength="20"
+                placeholder="Enter your name"
+                autocomplete="off"
+            >
+
+            <p id="errorMessage" class="error hidden"></p>
+
+            <button id="createGame">
+                CREATE GAME
+            </button>
+
+            <button id="backButton" class="secondary">
+                BACK
+            </button>
+
+        </section>
+
+    </main>
+
+    <script type="module" src="create.js"></script>
+
+</body>
+</html>
