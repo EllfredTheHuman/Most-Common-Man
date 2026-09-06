@@ -1,8 +1,3 @@
-/* =================================
-   MOST COMMON MAN
-   Lobby Styles
-================================= */
-
 .lobby-screen {
     min-height: 100vh;
     min-height: 100svh;
@@ -12,13 +7,13 @@
     align-items: center;
 
     position: relative;
+
     overflow: hidden;
 
     padding: 30px 20px;
 
     background: var(--blue);
 }
-
 
 .lobby-container {
     width: min(100%, 700px);
@@ -27,41 +22,29 @@
     z-index: 2;
 }
 
-
-/* ================================
-   HEADER
-================================ */
-
 .lobby-header {
+    margin-bottom: 28px;
     text-align: center;
-
-    margin-bottom: 30px;
 }
-
 
 .lobby-header h1 {
     margin: 10px 0 0;
 
-    font-size: clamp(3rem, 10vw, 5.5rem);
-
-    line-height: 0.8;
+    font-size: clamp(3.5rem, 10vw, 5.5rem);
 }
 
 
-/* ================================
-   NAME SECTION
-================================ */
+/* NAME */
 
 .name-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     width: min(100%, 500px);
 
     margin: 0 auto;
-
     padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     background: var(--white);
 
@@ -71,21 +54,16 @@
     box-shadow: 8px 8px 0 var(--navy);
 }
 
-
 .name-section label {
     margin-bottom: 12px;
 
     font-family: "Baloo 2", sans-serif;
     font-size: 1.4rem;
     font-weight: 800;
-
-    transform: rotate(-1deg);
 }
-
 
 .name-section input {
     width: 100%;
-
     min-height: 58px;
 
     padding: 10px 16px;
@@ -97,96 +75,53 @@
 
     color: var(--navy);
 
-    font-family: "Nunito", sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
 
     outline: none;
 }
 
-
 .name-section input:focus {
     background: var(--white);
-
     box-shadow: 4px 4px 0 var(--yellow);
 }
 
-
 .name-section input::placeholder {
     color: var(--navy);
-    opacity: 0.55;
+    opacity: 0.5;
 }
 
+.lobby-error {
+    min-height: 22px;
+
+    margin: 8px 0 0;
+
+    color: var(--coral);
+
+    font-size: 0.85rem;
+    font-weight: 800;
+
+    text-align: center;
+}
 
 .lobby-button {
     width: 100%;
-
-    min-height: 58px;
-
-    margin-top: 16px;
-
-    border: 4px solid var(--navy);
-    border-radius: 16px;
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.2rem;
-    font-weight: 800;
-
-    color: var(--navy);
-
-    cursor: pointer;
-
-    box-shadow: 0 5px 0 var(--navy);
-
-    transition:
-        transform 0.12s ease,
-        box-shadow 0.12s ease;
+    margin-top: 15px;
 }
 
 
-.lobby-button:hover {
-    transform: translateY(-2px) rotate(-1deg);
-
-    box-shadow: 0 7px 0 var(--navy);
-}
-
-
-.lobby-button:active {
-    transform: translateY(3px);
-
-    box-shadow: 0 2px 0 var(--navy);
-}
-
-
-/* ================================
-   HIDDEN
-================================ */
-
-.hidden {
-    display: none !important;
-}
-
-
-/* ================================
-   LOBBY CONTENT
-================================ */
+/* CONTENT */
 
 .lobby-content {
     display: flex;
     flex-direction: column;
-
     gap: 20px;
 }
 
 
-/* ================================
-   GAME CODE
-================================ */
+/* CODE */
 
 .game-code-box {
     padding: 22px;
-
-    text-align: center;
 
     background: var(--yellow);
 
@@ -194,31 +129,26 @@
     border-radius: 24px;
 
     box-shadow: 7px 7px 0 var(--navy);
+
+    text-align: center;
 }
 
-
 .game-code-box p {
-    margin-bottom: 3px;
-
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 800;
-
     letter-spacing: 2px;
 }
 
-
 .game-code {
-    margin: 2px 0 8px;
+    margin: 5px 0 10px;
 
     font-family: "Baloo 2", sans-serif;
-    font-size: clamp(2.8rem, 10vw, 4.5rem);
+    font-size: clamp(3rem, 10vw, 4.5rem);
     font-weight: 800;
 
     letter-spacing: 8px;
-
     line-height: 1;
 }
-
 
 .copy-code {
     padding: 7px 15px;
@@ -230,29 +160,18 @@
 
     color: var(--navy);
 
-    font-family: "Nunito", sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 800;
 
     cursor: pointer;
-
-    transition: transform 0.12s ease;
 }
-
 
 .copy-code:hover {
-    transform: rotate(-2deg) scale(1.04);
+    transform: rotate(-2deg);
 }
 
 
-.copy-code:active {
-    transform: scale(0.96);
-}
-
-
-/* ================================
-   PLAYERS
-================================ */
+/* PLAYERS */
 
 .players-section {
     padding: 22px;
@@ -265,7 +184,6 @@
     box-shadow: 7px 7px 0 var(--navy);
 }
 
-
 .section-heading {
     display: flex;
     justify-content: space-between;
@@ -274,15 +192,12 @@
     margin-bottom: 15px;
 }
 
-
-.section-heading h2 {
+.section-heading h2,
+.host-settings h2 {
     font-family: "Baloo 2", sans-serif;
     font-size: 1.8rem;
     font-weight: 800;
-
-    line-height: 1;
 }
-
 
 .section-heading span {
     padding: 5px 10px;
@@ -292,14 +207,9 @@
     border: 3px solid var(--navy);
     border-radius: 10px;
 
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 800;
 }
-
-
-/* ================================
-   PLAYER LIST
-================================ */
 
 .players-list {
     display: grid;
@@ -309,12 +219,11 @@
     gap: 10px;
 }
 
-
 .player-card {
+    min-height: 55px;
+
     display: flex;
     align-items: center;
-
-    min-height: 55px;
 
     padding: 10px 14px;
 
@@ -324,15 +233,11 @@
     border-radius: 14px;
 
     font-weight: 800;
-
-    overflow: hidden;
 }
-
 
 .player-card.host {
     background: var(--yellow);
 }
-
 
 .player-card-name {
     overflow: hidden;
@@ -341,22 +246,18 @@
     white-space: nowrap;
 }
 
-
 .host-label {
     margin-left: auto;
-
     padding-left: 8px;
 
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 800;
 
-    opacity: 0.7;
+    opacity: 0.6;
 }
 
 
-/* ================================
-   HOST SETTINGS
-================================ */
+/* SETTINGS */
 
 .host-settings {
     padding: 22px;
@@ -369,45 +270,35 @@
     box-shadow: 7px 7px 0 var(--navy);
 }
 
-
 .host-settings h2 {
     margin-bottom: 15px;
-
-    font-family: "Baloo 2", sans-serif;
-    font-size: 1.8rem;
-    font-weight: 800;
 }
-
 
 .setting {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 
     gap: 20px;
 }
 
-
 .setting strong {
     font-family: "Baloo 2", sans-serif;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
 }
-
 
 .setting p {
     margin-top: 2px;
 
     font-size: 0.8rem;
     font-weight: 700;
-
-    opacity: 0.75;
+    opacity: 0.7;
 }
 
-
 .setting select {
-    min-width: 190px;
+    min-width: 200px;
 
-    padding: 11px 12px;
+    padding: 11px;
 
     border: 3px solid var(--navy);
     border-radius: 12px;
@@ -416,19 +307,13 @@
 
     color: var(--navy);
 
-    font-family: "Nunito", sans-serif;
-    font-size: 0.9rem;
     font-weight: 800;
-
-    cursor: pointer;
 
     outline: none;
 }
 
 
-/* ================================
-   ACTIONS
-================================ */
+/* ACTIONS */
 
 .lobby-actions {
     display: grid;
@@ -438,38 +323,16 @@
     gap: 12px;
 }
 
-
 .lobby-actions .lobby-button {
     margin-top: 0;
 }
-
 
 #startButton {
     background: var(--green);
 }
 
 
-#startButton:disabled {
-    background: #d8d8d8;
-
-    cursor: not-allowed;
-
-    opacity: 0.65;
-
-    transform: none;
-
-    box-shadow: 0 5px 0 var(--navy);
-}
-
-
-.lobby-actions .secondary-button {
-    background: var(--white);
-}
-
-
-/* ================================
-   DECORATIONS
-================================ */
+/* DECOR */
 
 .lobby-decor {
     position: absolute;
@@ -481,177 +344,82 @@
     font-weight: 800;
 }
 
-
 .lobby-star {
     top: 8%;
     left: 8%;
 
     color: var(--yellow);
-
     font-size: 4rem;
 
     transform: rotate(15deg);
 }
-
 
 .lobby-dot {
     right: 9%;
     bottom: 12%;
 
     color: var(--coral);
-
     font-size: 5rem;
-
-    transform: rotate(-10deg);
 }
 
 
-/* ================================
-   MOBILE
-================================ */
+/* MOBILE */
 
 @media (max-width: 600px) {
 
     .lobby-screen {
         align-items: flex-start;
-
         padding: 25px 15px 40px;
     }
-
 
     .lobby-container {
         margin-top: 10px;
     }
 
-
-    .lobby-header {
-        margin-bottom: 25px;
-    }
-
-
     .lobby-header h1 {
         font-size: clamp(3rem, 16vw, 5rem);
     }
 
-
     .name-section {
         padding: 25px 20px;
-
         border-width: 4px;
-
         box-shadow: 6px 6px 0 var(--navy);
     }
-
 
     .game-code-box,
     .players-section,
     .host-settings {
         border-width: 4px;
-
         box-shadow: 5px 5px 0 var(--navy);
     }
-
 
     .players-list {
         grid-template-columns: 1fr;
     }
 
-
     .setting {
         flex-direction: column;
         align-items: stretch;
-
-        gap: 12px;
     }
-
 
     .setting select {
         width: 100%;
         min-width: 0;
     }
 
-
     .lobby-actions {
         grid-template-columns: 1fr;
     }
 
-
-    .lobby-decor {
-        opacity: 0.7;
-    }
-
-
     .lobby-star {
         top: 3%;
         left: 3%;
-
         font-size: 2.5rem;
     }
-
 
     .lobby-dot {
         right: 3%;
         bottom: 5%;
-
         font-size: 3rem;
     }
-}
-
-.lobby-message {
-    width: 100%;
-    min-height: 22px;
-    margin: 12px 0 0;
-    text-align: center;
-    font-size: 0.85rem;
-    font-weight: 800;
-    opacity: 0.7;
-}
-
-.lobby-message.error-message {
-    color: var(--coral);
-    opacity: 1;
-}
-
-.player-card {
-    gap: 10px;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-
-.player-card:hover {
-    transform: translateX(2px) rotate(-0.5deg);
-    box-shadow: 3px 3px 0 var(--navy);
-}
-
-.player-card.you {
-    background: var(--yellow);
-}
-
-.player-number {
-    flex: 0 0 30px;
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    border: 2px solid var(--navy);
-    border-radius: 9px;
-    background: var(--white);
-    font-family: "Baloo 2", sans-serif;
-    font-weight: 900;
-}
-
-.player-name {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.host-badge {
-    margin-left: auto;
-    padding: 4px 8px;
-    border: 2px solid var(--navy);
-    border-radius: 8px;
-    background: var(--coral);
-    font-size: 0.65rem;
-    font-weight: 900;
 }
