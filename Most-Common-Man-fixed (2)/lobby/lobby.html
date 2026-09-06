@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Lobby — Most Common Man</title>
+
+<link
+    rel="stylesheet"
+    href="../style.css"
+>
+
+<link
+    rel="stylesheet"
+    href="lobby.css"
+>
+
+</head>
+
+<body>
+
+<main class="lobby-screen">
+
+    <div class="lobby-decor lobby-star">
+        ✦
+    </div>
+
+    <div class="lobby-decor lobby-dot">
+        ●
+    </div>
+
+
+    <section class="lobby-container">
+
+
+        <!-- HEADER -->
+
+        <header class="lobby-header">
+
+            <p class="eyebrow">
+                MOST COMMON MAN
+            </p>
+
+            <h1>
+                GAME LOBBY
+            </h1>
+
+        </header>
+
+
+        <!-- NAME ENTRY -->
+
+        <section
+            class="name-section"
+            id="nameSection"
+        >
+
+            <label for="playerName">
+                WHAT'S YOUR NAME?
+            </label>
+
+            <input
+                type="text"
+                id="playerName"
+                maxlength="20"
+                placeholder="Enter your name..."
+                autocomplete="off"
+            >
+
+            <p id="lobbyMessage" class="lobby-message"></p>
+
+            <button
+                class="primary-button lobby-button"
+                id="joinLobbyButton"
+                type="button"
+            >
+                JOIN GAME
+            </button>
+
+        </section>
+
+
+        <!-- LOBBY CONTENT -->
+
+        <section
+            class="lobby-content hidden"
+            id="lobbyContent"
+        >
+
+
+            <!-- GAME CODE -->
+
+            <div class="game-code-box">
+
+                <p>
+                    GAME CODE
+                </p>
+
+                <div
+                    class="game-code"
+                    id="gameCode"
+                >
+                    ------
+                </div>
+
+                <button
+                    class="copy-code"
+                    id="copyCodeButton"
+                    type="button"
+                >
+                    COPY CODE
+                </button>
+
+            </div>
+
+
+            <!-- PLAYERS -->
+
+            <div class="players-section">
+
+                <div class="section-heading">
+
+                    <h2>
+                        PLAYERS
+                    </h2>
+
+                    <span id="playerCount">
+                        0/8
+                    </span>
+
+                </div>
+
+                <div
+                    class="players-list"
+                    id="playersList"
+                >
+
+                </div>
+
+            </div>
+
+
+            <!-- HOST SETTINGS -->
+
+            <section
+                class="host-settings hidden"
+                id="hostSettings"
+            >
+
+                <h2>
+                    GAME SETTINGS
+                </h2>
+
+
+                <div class="setting">
+
+                    <div>
+
+                        <strong>
+                            MODIFIER
+                        </strong>
+
+                        <p>
+                            Add an extra rule to the whole game.
+                        </p>
+
+                    </div>
+
+
+                    <select id="modifierSelect">
+
+                        <option value="none">
+                            None
+                        </option>
+
+                        <option value="common-man">
+                            Common Man
+                        </option>
+
+                        <option value="no-obvious">
+                            No Obvious Answers
+                        </option>
+
+                        <option value="character">
+                            The Character
+                        </option>
+
+                        <option value="money-talks">
+                            Money Talks
+                        </option>
+
+                        <option value="predictive">
+                            Predictive Common Man
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACTIONS -->
+
+            <div class="lobby-actions">
+
+                <button
+                    class="primary-button lobby-button"
+                    id="startButton"
+                    type="button"
+                    disabled
+                >
+                    START GAME
+                </button>
+
+
+                <button
+                    class="secondary-button lobby-button"
+                    id="leaveButton"
+                    type="button"
+                >
+                    LEAVE
+                </button>
+
+            </div>
+
+
+        </section>
+
+    </section>
+
+</main>
+
+
+<script
+    type="module"
+    src="lobby.js"
+></script>
+```
+
+</body>
+
+</html>
