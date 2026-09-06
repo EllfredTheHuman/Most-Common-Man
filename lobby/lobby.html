@@ -1,11 +1,10 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Create Game — Most Common Man</title>
+    <title>Lobby — Most Common Man</title>
 
     <link rel="stylesheet" href="lobby.css">
 </head>
@@ -13,31 +12,47 @@
 <body>
 
     <main class="lobby">
-        <h1>CREATE GAME</h1>
 
-        <p class="subtitle">Get your common people together.</p>
+        <header class="lobby-header">
+            <p class="eyebrow">GAME CODE</p>
 
-        <section class="setup-card">
-            <label for="playerName">YOUR NAME</label>
+            <h1 id="gameCode">------</h1>
 
-            <input
-                type="text"
-                id="playerName"
-                maxlength="20"
-                placeholder="Enter your name"
-                autocomplete="off"
-            >
+            <p>Share this code with everyone joining your game.</p>
+        </header>
 
-            <button id="createGame">CREATE GAME</button>
+        <section class="players-section">
 
-            <button id="backButton" class="secondary">
-                BACK
-            </button>
+            <div class="section-header">
+                <h2>PLAYERS</h2>
+                <span id="playerCount">0 / 8</span>
+            </div>
+
+            <div id="playersList" class="players-list">
+                <!-- Players are added here by lobby.js -->
+            </div>
+
         </section>
+
+        <div class="lobby-actions">
+            <button id="startGame" disabled>
+                START GAME
+            </button>
+
+            <button id="leaveGame" class="secondary">
+                LEAVE GAME
+            </button>
+        </div>
+
     </main>
 
-    <script src="lobby.js"></script>
+    <div id="loading" class="loading">
+        <div class="loading-card">
+            <p>CONNECTING...</p>
+        </div>
+    </div>
+
+    <script type="module" src="lobby.js"></script>
 
 </body>
 </html>
-```
