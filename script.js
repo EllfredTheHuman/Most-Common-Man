@@ -5,6 +5,9 @@ const howToPlayButton = document.getElementById("howToPlay");
 const howToPlayModal = document.getElementById("howToPlayModal");
 const closeModalButton = document.getElementById("closeModal");
 
+
+// HOW TO PLAY
+
 howToPlayButton.addEventListener("click", () => {
     howToPlayModal.classList.remove("hidden");
 });
@@ -19,10 +22,25 @@ howToPlayModal.addEventListener("click", (event) => {
     }
 });
 
-createGameButton.addEventListener("click", () => {
-    console.log("Create Game clicked");
+
+// KEYBOARD
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        howToPlayModal.classList.add("hidden");
+    }
 });
 
+
+// CREATE GAME
+
+createGameButton.addEventListener("click", () => {
+    window.location.href = "create/create.html";
+});
+
+
+// JOIN GAME
+
 joinGameButton.addEventListener("click", () => {
-    console.log("Join Game clicked");
+    window.location.href = "join/join.html";
 });
