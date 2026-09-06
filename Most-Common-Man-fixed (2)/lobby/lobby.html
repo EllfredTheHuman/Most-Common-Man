@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>Lobby — Most Common Man</title>
+    <title>Lobby — Most Common Man</title>
 
-<link
-    rel="stylesheet"
-    href="../style.css"
->
+    <link
+        rel="stylesheet"
+        href="../style.css"
+    >
 
-<link
-    rel="stylesheet"
-    href="lobby.css"
->
+    <link
+        rel="stylesheet"
+        href="lobby.css"
+    >
 
 </head>
 
@@ -29,19 +28,10 @@
 
 <main class="lobby-screen">
 
-    <div class="lobby-decor lobby-star">
-        ✦
-    </div>
-
-    <div class="lobby-decor lobby-dot">
-        ●
-    </div>
-
+    <div class="lobby-decor lobby-star">✦</div>
+    <div class="lobby-decor lobby-dot">●</div>
 
     <section class="lobby-container">
-
-
-        <!-- HEADER -->
 
         <header class="lobby-header">
 
@@ -56,11 +46,9 @@
         </header>
 
 
-        <!-- NAME ENTRY -->
-
         <section
-            class="name-section"
             id="nameSection"
+            class="name-section"
         >
 
             <label for="playerName">
@@ -68,18 +56,21 @@
             </label>
 
             <input
-                type="text"
                 id="playerName"
+                type="text"
                 maxlength="20"
-                placeholder="Enter your name..."
                 autocomplete="off"
+                placeholder="Enter your name..."
             >
 
-            <p id="lobbyMessage" class="lobby-message"></p>
+            <p
+                id="joinError"
+                class="lobby-error"
+            ></p>
 
             <button
-                class="primary-button lobby-button"
                 id="joinLobbyButton"
+                class="primary-button lobby-button"
                 type="button"
             >
                 JOIN GAME
@@ -88,15 +79,10 @@
         </section>
 
 
-        <!-- LOBBY CONTENT -->
-
         <section
-            class="lobby-content hidden"
             id="lobbyContent"
+            class="lobby-content hidden"
         >
-
-
-            <!-- GAME CODE -->
 
             <div class="game-code-box">
 
@@ -105,15 +91,15 @@
                 </p>
 
                 <div
-                    class="game-code"
                     id="gameCode"
+                    class="game-code"
                 >
                     ------
                 </div>
 
                 <button
-                    class="copy-code"
                     id="copyCodeButton"
+                    class="copy-code"
                     type="button"
                 >
                     COPY CODE
@@ -122,9 +108,7 @@
             </div>
 
 
-            <!-- PLAYERS -->
-
-            <div class="players-section">
+            <section class="players-section">
 
                 <div class="section-heading">
 
@@ -139,26 +123,21 @@
                 </div>
 
                 <div
-                    class="players-list"
                     id="playersList"
-                >
+                    class="players-list"
+                ></div>
 
-                </div>
+            </section>
 
-            </div>
-
-
-            <!-- HOST SETTINGS -->
 
             <section
-                class="host-settings hidden"
                 id="hostSettings"
+                class="host-settings hidden"
             >
 
                 <h2>
                     GAME SETTINGS
                 </h2>
-
 
                 <div class="setting">
 
@@ -173,7 +152,6 @@
                         </p>
 
                     </div>
-
 
                     <select id="modifierSelect">
 
@@ -208,30 +186,26 @@
             </section>
 
 
-            <!-- ACTIONS -->
-
             <div class="lobby-actions">
 
                 <button
-                    class="primary-button lobby-button"
                     id="startButton"
+                    class="primary-button lobby-button"
                     type="button"
                     disabled
                 >
                     START GAME
                 </button>
 
-
                 <button
-                    class="secondary-button lobby-button"
                     id="leaveButton"
+                    class="secondary-button lobby-button"
                     type="button"
                 >
                     LEAVE
                 </button>
 
             </div>
-
 
         </section>
 
@@ -244,8 +218,6 @@
     type="module"
     src="lobby.js"
 ></script>
-```
 
 </body>
-
 </html>
