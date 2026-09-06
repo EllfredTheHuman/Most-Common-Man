@@ -3,122 +3,298 @@ import { auth, db, signInAnonymously } from "../firebase.js";
 import {
     doc,
     getDoc,
-    setDoc,
-    serverTimestamp
+    collection,
+    onSnapshot,
+    updateDoc,
+    deleteDoc,
+    query,
+    orderBy
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-const createGameButton = document.getElementById("createGame");
-const backButton = document.getElementById("backButton");
-const playerNameInput = document.getElementById("playerName");
+const gameCodeElement = document.getElementById("gameCode");
+const playerCountElement = document.getElementById("playerCount");
+const playersListElement = document.getElementById("playersList");
 
-const GAME_CODE_LENGTH = 6;
-const GAME_CODE_CHARACTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const startGameButton = document.getElementById("startGame");
+const leaveGameButton = document.getElementById("leaveGame");
+const loadingElement = document.getElementById("loading");
 
-function generateGameCode() {
-    let code = "";
+const urlParams = new URLSearchParams(window.location.search);
+const gameCode = urlParams.get("code");
 
-    for (let i = 0; i < GAME_CODE_LENGTH; i++) {
-        const randomIndex = Math.floor(
-            Math.random() * GAME_CODE_CHARACTERS.length
-        );
+let currentUser = null;
+let gameData = null;
+let unsubscribePlayers = null;
+let unsubscribeGame = null;
 
-        code += GAME_CODE_CHARACTERS[randomIndex];
-    }
-
-    return code;
+function showLoading() {
+    loadingElement.classList.remove("hidden");
 }
 
-async function getAvailableGameCode() {
-    for (let attempt = 0; attempt < 10; attempt++) {
-        const code = generateGameCode();
-        const gameRef = doc(db, "games", code);
-        const gameSnapshot = await getDoc(gameRef);
-
-        if (!gameSnapshot.exists()) {
-            return code;
-        }
-    }
-
-    throw new Error("Could not generate an available game code.");
+function hideLoading() {
+    loadingElement.classList.add("hidden");
 }
 
-async function createGame() {
-    const playerName = playerNameInput.value.trim();
+function showError(message) {
+    hideLoading();
 
-    if (!playerName) {
-        playerNameInput.focus();
+    alert(message);
+
+    window.location.href = "../index.html";
+}
+
+async function initialiseLobby() {
+    if (!gameCode) {
+        showError("No game code was provided.");
         return;
     }
 
-    createGameButton.disabled = true;
-    backButton.disabled = true;
-    createGameButton.textContent = "CREATING...";
+    try {
+        showLoading();
+
+        /*
+         * Sign in anonymously if there isn't already
+         * an authenticated Firebase user.
+         */
+        if (auth.currentUser) {
+            currentUser = auth.currentUser;
+        } else {
+            const credentials = await signInAnonymously(auth);
+            currentUser = credentials.user;
+        }
+
+        const gameRef = doc(db, "games", gameCode);
+        const gameSnapshot = await getDoc(gameRef);
+
+        if (!gameSnapshot.exists()) {
+            showError("That game doesn't exist.");
+            return;
+        }
+
+        gameData = gameSnapshot.data();
+
+        /*
+         * Make sure the game is still in the lobby.
+         */
+        if (gameData.status !== "lobby") {
+            showError("This game has already started.");
+            return;
+        }
+
+        /*
+         * Display the game code.
+         */
+        gameCodeElement.textContent = gameCode;
+
+        /*
+         * Listen for game changes.
+         */
+        unsubscribeGame = onSnapshot(
+            gameRef,
+            (snapshot) => {
+                if (!snapshot.exists()) {
+                    showError("The game has been closed.");
+                    return;
+                }
+
+                gameData = snapshot.data();
+
+                if (gameData.status === "playing") {
+                    window.location.href = `../game/game.html?code=${gameCode}`;
+                    return;
+                }
+
+                if (gameData.status === "finished") {
+                    window.location.href = `../index.html`;
+                }
+
+                updateStartButton();
+            },
+            (error) => {
+                console.error("Game listener error:", error);
+            }
+        );
+
+        /*
+         * Listen for players joining and leaving.
+         */
+        const playersRef = collection(
+            db,
+            "games",
+            gameCode,
+            "players"
+        );
+
+        const playersQuery = query(
+            playersRef,
+            orderBy("joinedAt", "asc")
+        );
+
+        unsubscribePlayers = onSnapshot(
+            playersQuery,
+            (snapshot) => {
+                renderPlayers(snapshot);
+                hideLoading();
+            },
+            (error) => {
+                console.error("Player listener error:", error);
+                hideLoading();
+            }
+        );
+
+    } catch (error) {
+        console.error("Failed to initialise lobby:", error);
+
+        showError(
+            "We couldn't connect to the game.\n\n" +
+            "Please check your Firebase configuration."
+        );
+    }
+}
+
+function renderPlayers(snapshot) {
+    const players = [];
+
+    snapshot.forEach((playerSnapshot) => {
+        players.push({
+            id: playerSnapshot.id,
+            ...playerSnapshot.data()
+        });
+    });
+
+    playerCountElement.textContent = `${players.length} / 8`;
+
+    playersListElement.innerHTML = "";
+
+    players.forEach((player) => {
+        const playerElement = document.createElement("div");
+
+        playerElement.className = "player";
+
+        const nameElement = document.createElement("span");
+
+        nameElement.className = "player-name";
+        nameElement.textContent = player.name;
+
+        playerElement.appendChild(nameElement);
+
+        if (player.isHost) {
+            const hostBadge = document.createElement("span");
+
+            hostBadge.className = "host-badge";
+            hostBadge.textContent = "HOST";
+
+            playerElement.appendChild(hostBadge);
+        }
+
+        playersListElement.appendChild(playerElement);
+    });
+
+    updateStartButton(players.length);
+}
+
+function updateStartButton(playerCount) {
+    if (!gameData || !currentUser) {
+        startGameButton.disabled = true;
+        return;
+    }
+
+    const isHost = gameData.hostId === currentUser.uid;
+
+    /*
+     * At least two players are required.
+     */
+    const enoughPlayers =
+        typeof playerCount === "number"
+            ? playerCount >= 2
+            : false;
+
+    startGameButton.disabled = !isHost || !enoughPlayers;
+
+    if (!isHost) {
+        startGameButton.textContent = "WAITING FOR HOST";
+    } else if (!enoughPlayers) {
+        startGameButton.textContent = "NEED 2 PLAYERS";
+    } else {
+        startGameButton.textContent = "START GAME";
+    }
+}
+
+async function startGame() {
+    if (!currentUser || !gameData) {
+        return;
+    }
+
+    if (gameData.hostId !== currentUser.uid) {
+        return;
+    }
 
     try {
-        // Sign the player in anonymously.
-        const userCredential = await signInAnonymously(auth);
-        const user = userCredential.user;
-
-        // Find an unused game code.
-        const gameCode = await getAvailableGameCode();
+        startGameButton.disabled = true;
+        startGameButton.textContent = "STARTING...";
 
         const gameRef = doc(db, "games", gameCode);
 
-        // Create the game room.
-        await setDoc(gameRef, {
-            code: gameCode,
-            hostId: user.uid,
-            status: "lobby",
-            currentRound: 0,
-            createdAt: serverTimestamp()
+        await updateDoc(gameRef, {
+            status: "playing",
+            currentRound: 1
         });
 
-        // Add the host to the players collection.
+    } catch (error) {
+        console.error("Failed to start game:", error);
+
+        alert("Couldn't start the game.");
+
+        startGameButton.disabled = false;
+        startGameButton.textContent = "START GAME";
+    }
+}
+
+async function leaveGame() {
+    if (!currentUser || !gameCode) {
+        window.location.href = "../index.html";
+        return;
+    }
+
+    try {
         const playerRef = doc(
             db,
             "games",
             gameCode,
             "players",
-            user.uid
+            currentUser.uid
         );
 
-        await setDoc(playerRef, {
-            id: user.uid,
-            name: playerName,
-            isHost: true,
-            joinedAt: serverTimestamp()
-        });
-
-        // Store the player's current game information.
-        sessionStorage.setItem("gameCode", gameCode);
-        sessionStorage.setItem("playerId", user.uid);
-        sessionStorage.setItem("playerName", playerName);
-
-        // Open the game lobby.
-        window.location.href = `lobby.html?code=${gameCode}`;
+        await deleteDoc(playerRef);
 
     } catch (error) {
-        console.error("Failed to create game:", error);
+        console.error("Failed to leave game:", error);
+    }
 
-        alert(
-            "We couldn't create the game.\n\n" +
-            "Please check your Firebase setup and try again."
-        );
+    cleanup();
 
-        createGameButton.disabled = false;
-        backButton.disabled = false;
-        createGameButton.textContent = "CREATE GAME";
+    sessionStorage.removeItem("gameCode");
+    sessionStorage.removeItem("playerId");
+    sessionStorage.removeItem("playerName");
+
+    window.location.href = "../index.html";
+}
+
+function cleanup() {
+    if (unsubscribePlayers) {
+        unsubscribePlayers();
+        unsubscribePlayers = null;
+    }
+
+    if (unsubscribeGame) {
+        unsubscribeGame();
+        unsubscribeGame = null;
     }
 }
 
-createGameButton.addEventListener("click", createGame);
+startGameButton.addEventListener("click", startGame);
+leaveGameButton.addEventListener("click", leaveGame);
 
-playerNameInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-        createGame();
-    }
-});
+window.addEventListener("beforeunload", cleanup);
 
-backButton.addEventListener("click", () => {
-    window.location.href = "../index.html";
-});
+initialiseLobby();
