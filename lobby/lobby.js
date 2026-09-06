@@ -1,9 +1,8 @@
-```javascript
 import { auth, db, signInAnonymously } from "../firebase.js";
 
 import {
-    collection,
     doc,
+    getDoc,
     setDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
@@ -12,18 +11,35 @@ const createGameButton = document.getElementById("createGame");
 const backButton = document.getElementById("backButton");
 const playerNameInput = document.getElementById("playerName");
 
-function generateGameCode() {
-    const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const GAME_CODE_LENGTH = 6;
+const GAME_CODE_CHARACTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
+function generateGameCode() {
     let code = "";
 
-    for (let i = 0; i < 6; i++) {
-        code += characters.charAt(
-            Math.floor(Math.random() * characters.length)
+    for (let i = 0; i < GAME_CODE_LENGTH; i++) {
+        const randomIndex = Math.floor(
+            Math.random() * GAME_CODE_CHARACTERS.length
         );
+
+        code += GAME_CODE_CHARACTERS[randomIndex];
     }
 
     return code;
+}
+
+async function getAvailableGameCode() {
+    for (let attempt = 0; attempt < 10; attempt++) {
+        const code = generateGameCode();
+        const gameRef = doc(db, "games", code);
+        const gameSnapshot = await getDoc(gameRef);
+
+        if (!gameSnapshot.exists()) {
+            return code;
+        }
+    }
+
+    throw new Error("Could not generate an available game code.");
 }
 
 async function createGame() {
@@ -35,6 +51,7 @@ async function createGame() {
     }
 
     createGameButton.disabled = true;
+    backButton.disabled = true;
     createGameButton.textContent = "CREATING...";
 
     try {
@@ -42,45 +59,54 @@ async function createGame() {
         const userCredential = await signInAnonymously(auth);
         const user = userCredential.user;
 
-        const gameCode = generateGameCode();
+        // Find an unused game code.
+        const gameCode = await getAvailableGameCode();
+
+        const gameRef = doc(db, "games", gameCode);
 
         // Create the game room.
-        await setDoc(doc(collection(db, "games"), gameCode), {
+        await setDoc(gameRef, {
             code: gameCode,
             hostId: user.uid,
             status: "lobby",
-            createdAt: serverTimestamp(),
-            currentRound: 0
+            currentRound: 0,
+            createdAt: serverTimestamp()
         });
 
-        // Add the host as the first player.
-        await setDoc(
-            doc(db, "games", gameCode, "players", user.uid),
-            {
-                id: user.uid,
-                name: playerName,
-                isHost: true,
-                joinedAt: serverTimestamp()
-            }
+        // Add the host to the players collection.
+        const playerRef = doc(
+            db,
+            "games",
+            gameCode,
+            "players",
+            user.uid
         );
 
-        // Save information for the next page.
+        await setDoc(playerRef, {
+            id: user.uid,
+            name: playerName,
+            isHost: true,
+            joinedAt: serverTimestamp()
+        });
+
+        // Store the player's current game information.
         sessionStorage.setItem("gameCode", gameCode);
         sessionStorage.setItem("playerId", user.uid);
         sessionStorage.setItem("playerName", playerName);
 
-        // Go to the lobby.
+        // Open the game lobby.
         window.location.href = `lobby.html?code=${gameCode}`;
 
     } catch (error) {
         console.error("Failed to create game:", error);
 
         alert(
-            "Something went wrong while creating the game.\n\n" +
-            "Check your Firebase configuration and try again."
+            "We couldn't create the game.\n\n" +
+            "Please check your Firebase setup and try again."
         );
 
         createGameButton.disabled = false;
+        backButton.disabled = false;
         createGameButton.textContent = "CREATE GAME";
     }
 }
@@ -96,4 +122,3 @@ playerNameInput.addEventListener("keydown", (event) => {
 backButton.addEventListener("click", () => {
     window.location.href = "../index.html";
 });
-```
