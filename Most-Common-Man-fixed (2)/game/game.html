@@ -1,89 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Game — Most Common Man</title>
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="game.css">
+
+    <link
+        rel="stylesheet"
+        href="../style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="game.css"
+    >
+
 </head>
+
 <body>
+
 <main class="game-screen">
+
     <header class="game-header">
+
         <div>
-            <p class="eyebrow">MOST COMMON MAN</p>
-            <div class="round-label">ROUND <span id="roundNumber">1</span> / <span id="roundTotal">5</span></div>
+
+            <p class="eyebrow">
+                MOST COMMON MAN
+            </p>
+
+            <div class="round-label">
+                ROUND
+                <span id="roundNumber">1</span>
+                /
+                <span id="roundTotal">5</span>
+            </div>
+
         </div>
-        <div id="modifierIndicator" class="modifier-indicator">NO MODIFIER</div>
+
+        <div
+            id="modifierIndicator"
+            class="modifier-indicator"
+        >
+            NO MODIFIER
+        </div>
+
     </header>
 
-    <div id="playerStatus" class="player-status">Connecting...</div>
 
-    <section id="waiting" class="game-panel hidden">
-        <div class="big-icon">⏳</div>
-        <div class="category-pill">HANG ON</div>
-        <h1>WAITING...</h1>
-        <p>Waiting for the host to start the game.</p>
+    <!-- WAITING -->
+
+    <section
+        id="waiting"
+        class="game-panel hidden"
+    >
+
+        <div class="big-icon">
+            ⏳
+        </div>
+
+        <h1>
+            WAITING...
+        </h1>
+
+        <p>
+            Waiting for everyone else.
+        </p>
+
     </section>
 
-    <section id="promptScreen" class="game-panel">
-        <div id="promptCategory" class="category-pill">CATEGORY</div>
-        <h1 id="promptQuestion">Loading question...</h1>
+
+    <!-- ANSWERING -->
+
+    <section
+        id="promptScreen"
+        class="game-panel hidden"
+    >
+
+        <div
+            id="promptCategory"
+            class="category-pill"
+        >
+            CATEGORY
+        </div>
+
+        <h1 id="promptQuestion">
+            Loading question...
+        </h1>
+
         <div class="answer-box">
-            <textarea id="answerInput" maxlength="100" placeholder="Your answer..." autocomplete="off"></textarea>
+
+            <textarea
+                id="answerInput"
+                maxlength="100"
+                autocomplete="off"
+                placeholder="Your answer..."
+            ></textarea>
+
             <div class="answer-footer">
-                <span id="characterCount">0/100</span>
-                <button id="submitAnswer" class="primary-button" type="button">LOCK IT IN</button>
+
+                <span id="characterCount">
+                    0/100
+                </span>
+
+                <button
+                    id="submitAnswer"
+                    class="primary-button"
+                    type="button"
+                >
+                    LOCK IT IN
+                </button>
+
             </div>
+
         </div>
-        <p class="keyboard-hint">CTRL / CMD + ENTER also locks it in</p>
+
     </section>
 
-    <section id="lockedScreen" class="game-panel hidden">
-        <div class="big-icon">🔒</div>
-        <div class="category-pill">ANSWER LOCKED</div>
-        <h1>LOCKED IN!</h1>
-        <p>Your answer is safely hidden.</p>
-        <p id="answerProgress" class="small-text">0 / 0 ANSWERED</p>
+
+    <!-- LOCKED -->
+
+    <section
+        id="lockedScreen"
+        class="game-panel hidden"
+    >
+
+        <div class="big-icon">
+            🔒
+        </div>
+
+        <h1>
+            LOCKED IN!
+        </h1>
+
+        <p>
+            Your answer is safely in.
+        </p>
+
+        <p class="small-text">
+            Waiting for everyone else...
+        </p>
+
     </section>
 
-    <section id="revealScreen" class="game-panel hidden">
-        <div class="category-pill">THE ANSWERS</div>
-        <h1>WHAT DID EVERYONE SAY?</h1>
-        <p class="instruction">No names. No clues. Just questionable answers.</p>
-        <div id="answersList" class="answers-list"></div>
-        <p class="small-text reveal-note">Get ready to judge.</p>
+
+    <!-- REVEAL -->
+
+    <section
+        id="revealScreen"
+        class="game-panel hidden"
+    >
+
+        <div class="category-pill">
+            THE ANSWERS
+        </div>
+
+        <h1>
+            WHAT DID EVERYONE SAY?
+        </h1>
+
+        <div
+            id="answersList"
+            class="answers-list"
+        ></div>
+
     </section>
 
-    <section id="rankingScreen" class="game-panel hidden">
-        <div class="category-pill">VOTE</div>
-        <h1>WHAT'S THE MOST COMMON ANSWER?</h1>
-        <p class="instruction">Drag answers from MOST common to LEAST common. On mobile, tap two answers to swap them.</p>
-        <p id="rankingProgress" class="progress-pill">0 / 0 VOTED</p>
-        <div id="rankingList" class="ranking-list"></div>
-        <button id="submitRanking" class="primary-button wide-button" type="button">SUBMIT VOTE</button>
+
+    <!-- RANKING -->
+
+    <section
+        id="rankingScreen"
+        class="game-panel hidden"
+    >
+
+        <div class="category-pill">
+            VOTE
+        </div>
+
+        <h1>
+            WHAT'S THE MOST COMMON ANSWER?
+        </h1>
+
+        <p class="instruction">
+            Drag the answers into order.
+            Most common goes at the top.
+        </p>
+
+        <div
+            id="rankingList"
+            class="ranking-list"
+        ></div>
+
+        <button
+            id="submitRanking"
+            class="primary-button wide-button"
+            type="button"
+        >
+            SUBMIT VOTE
+        </button>
+
     </section>
 
-    <section id="resultsScreen" class="game-panel hidden">
-        <div class="category-pill">RESULTS</div>
-        <h1>THE COMMON MAN HAS SPOKEN</h1>
-        <p id="resultsMultiplier" class="progress-pill">ROUND 1 ×1</p>
-        <div id="resultsList" class="results-list"></div>
-        <p id="resultsWaiting" class="small-text">Waiting for the host to continue...</p>
-        <button id="nextRoundButton" class="primary-button wide-button hidden" type="button">NEXT ROUND</button>
+
+    <!-- RESULTS -->
+
+    <section
+        id="resultsScreen"
+        class="game-panel hidden"
+    >
+
+        <div class="category-pill">
+            RESULTS
+        </div>
+
+        <h1>
+            THE COMMON MAN HAS SPOKEN
+        </h1>
+
+        <div
+            id="resultsList"
+            class="results-list"
+        ></div>
+
+        <button
+            id="nextRoundButton"
+            class="primary-button wide-button hidden"
+            type="button"
+        >
+            NEXT ROUND
+        </button>
+
     </section>
 
-    <section id="finalScreen" class="game-panel hidden">
-        <div class="category-pill">FINAL RESULTS</div>
-        <h1>THE MOST COMMON MAN IS...</h1>
+
+    <!-- FINAL -->
+
+    <section
+        id="finalScreen"
+        class="game-panel hidden"
+    >
+
+        <div class="category-pill">
+            FINAL RESULTS
+        </div>
+
+        <h1>
+            THE MOST COMMON MAN IS...
+        </h1>
+
         <div class="winner-card">
-            <div id="winnerName" class="winner-name">PLAYER</div>
-            <div class="winner-score"><span id="winnerScore">0</span> POINTS</div>
+
+            <div
+                id="winnerName"
+                class="winner-name"
+            >
+                PLAYER
+            </div>
+
+            <div class="winner-score">
+
+                <span id="winnerScore">
+                    0
+                </span>
+
+                POINTS
+
+            </div>
+
         </div>
-        <div id="finalLeaderboard" class="leaderboard"></div>
-        <button class="secondary-button wide-button" type="button" onclick="window.location.href='../index.html'">BACK TO HOME</button>
+
+        <div
+            id="finalLeaderboard"
+            class="leaderboard"
+        ></div>
+
+        <button
+            id="homeButton"
+            class="secondary-button wide-button"
+            type="button"
+        >
+            BACK TO HOME
+        </button>
+
     </section>
+
 </main>
+
+
+<!-- PROMPTS LIVE IN "propmts" -->
 
 <script src="../propmts/money.js"></script>
 <script src="../propmts/everyday-life.js"></script>
@@ -95,6 +307,11 @@
 <script src="../propmts/moral-dilemmas.js"></script>
 <script src="../propmts/ridiculous.js"></script>
 <script src="../propmts/hamish-and-andy.js"></script>
-<script type="module" src="game.js"></script>
+
+<script
+    type="module"
+    src="game.js"
+></script>
+
 </body>
 </html>
