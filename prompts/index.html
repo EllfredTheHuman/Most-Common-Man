@@ -1,0 +1,109 @@
+import { foodQuestions } from "./food.js";
+import { workQuestions } from "./work.js";
+import { familyQuestions } from "./family.js";
+import { moneyQuestions } from "./money.js";
+import { sportQuestions } from "./sport.js";
+import { everydayLifeQuestions } from "./everyday-life.js";
+import { travelQuestions } from "./travel.js";
+import { schoolQuestions } from "./school.js";
+import { moralDilemmasQuestions } from "./moral-dilemmas.js";
+import { ridiculousQuestions } from "./ridiculous.js";
+import { otherQuestions } from "./other.js";
+
+
+export const PROMPT_CATEGORIES = {
+    food: {
+        name: "Food",
+        questions: foodQuestions
+    },
+
+    work: {
+        name: "Work",
+        questions: workQuestions
+    },
+
+    family: {
+        name: "Family",
+        questions: familyQuestions
+    },
+
+    money: {
+        name: "Money",
+        questions: moneyQuestions
+    },
+
+    sport: {
+        name: "Sport",
+        questions: sportQuestions
+    },
+
+    "everyday-life": {
+        name: "Everyday Life",
+        questions: everydayLifeQuestions
+    },
+
+    travel: {
+        name: "Travel",
+        questions: travelQuestions
+    },
+
+    school: {
+        name: "School",
+        questions: schoolQuestions
+    },
+
+    "moral-dilemmas": {
+        name: "Moral Dilemmas",
+        questions: moralDilemmasQuestions
+    },
+
+    ridiculous: {
+        name: "Ridiculous",
+        questions: ridiculousQuestions
+    },
+
+    other: {
+        name: "Other Stuff",
+        questions: otherQuestions
+    }
+};
+
+
+export const CATEGORY_KEYS =
+    Object.keys(PROMPT_CATEGORIES);
+
+
+export function getRandomQuestion(category = null) {
+    let categoryKey = category;
+
+    if (
+        !categoryKey ||
+        !PROMPT_CATEGORIES[categoryKey]
+    ) {
+        categoryKey =
+            CATEGORY_KEYS[
+                Math.floor(
+                    Math.random() * CATEGORY_KEYS.length
+                )
+            ];
+    }
+
+    const selectedCategory =
+        PROMPT_CATEGORIES[categoryKey];
+
+    const questions =
+        selectedCategory.questions;
+
+    const question =
+        questions[
+            Math.floor(
+                Math.random() * questions.length
+            )
+        ];
+
+    return {
+        category: selectedCategory.name,
+        categoryKey,
+        question
+    };
+}
